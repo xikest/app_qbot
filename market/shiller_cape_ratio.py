@@ -38,7 +38,7 @@ class ShillerRatio:
     srp.plot("SP500_REAL_PRICE_MONTH", modeBinary:bool = False)
     srp.plot("SP500_PE_RATIO_MONTH", modeBinary:bool = False)
     """
-    def __init__(self):
+    def __init__(self, modeBinary=True):
 
         pio.templates.default = 'plotly_white'
         self.dictQndlKeysMultpl = {'SHILLER_PE_RATIO_MONTH': 'Shiller PE Ratio by Month',
@@ -46,21 +46,29 @@ class ShillerRatio:
                               'SP500_EARNINGS_YIELD_MONTH': 'S&P 500 Earnings Yield by Month',
                               'SP500_REAL_PRICE_MONTH': 'S&P 500 Real Price by Month',
                               'SP500_PE_RATIO_MONTH': 'S&P 500 PE Ratio by Month'}
+        self.modeBinary = modeBinary
+        self.df = prepare_dataset(list(self.dictQndlKeysMultpl))
         pass
 
-    def plot(self, dataKey1='SHILLER_PE_RATIO_MONTH',years_from_today = 10, modeBinary:bool = True):
-        fig = make_subplots()  # 그래프 준비
-        name = self.dictQndlKeysMultpl.get(dataKey1)
-        ds1 = prepare_dataset([dataKey1], years_from_today).loc[:, dataKey1]   ## 데이터 준비, df -> ds
-        fig.add_trace(
-            go.Scatter(x = ds1.index, y = ds1, mode = 'lines', marker = dict(size = 10), name=name))
-        fig.add_annotation(get_annot(ds = ds1, pos ='recent'), showarrow=False, arrowhead=1)\
-            .add_annotation(get_annot(ds = ds1, pos ='max'),showarrow=False, arrowhead=1)\
-            .add_annotation(get_annot(ds = ds1, pos ='min'),showarrow=False, arrowhead=1) # 화살표 헤드 표시: arrowhead=1
-        if dataKey1 == 'SHILLER_PE_RATIO_MONTH': #CAPE 범위 표시
-            fig.add_hline(y=26, annotation_text='CAPE:26',  annotation_position= 'bottom left', annotation_font_color='gray')
-            fig.add_hline(y=32, annotation_text='CAPE:32', annotation_position='bottom left', annotation_font_color='gray')
-        fig.update_layout(title=f'{name}', width=500, height=700)
-        if modeBinary:
-            return fig.to_image(format="png", scale=2)
-        return fig.show()
+
+
+    def shillerPlots(self):
+        yield from [plot( self.df.loc[:, dataKey], self.dictQndlKeysMultpl.get(dataKey), self.modeBinary) for dataKey in self.dictQndlKeysMultpl.keys()]
+
+
+
+def plot(ds1:pd.Series, title:str=None, modeBinary:bool = False):
+    fig = make_subplots()  # 그래프 준비
+    fig.add_trace(
+        go.Scatter(x = ds1.index, y = ds1, mode = 'lines', marker = dict(size = 10), name=title))
+    fig.add_annotation(get_annot(ds = ds1, pos ='recent'), showarrow=False, arrowhead=1)\
+        .add_annotation(get_annot(ds = ds1, pos ='max'),showarrow=False, arrowhead=1)\
+        .add_annotation(get_annot(ds = ds1, pos ='min'),showarrow=False, arrowhead=1) # 화살표 헤드 표시: arrowhead=1
+    if title == 'Shiller PE Ratio by Month': #CAPE 범위 표시
+        fig.add_hline(y=26, annotation_text='CAPE:26',  annotation_position= 'bottom left', annotation_font_color='gray')
+        fig.add_hline(y=32, annotation_text='CAPE:32', annotation_position='bottom left', annotation_font_color='gray')
+    fig.update_layout(title=f'{title}', width=500, height=700)
+    if modeBinary:
+        return fig.to_image(format="png", scale=2)
+    return fig.show()
+
