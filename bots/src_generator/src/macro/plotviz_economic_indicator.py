@@ -39,14 +39,15 @@ class PlotEconomicIdx:
         else:   return PlotvizBasic.plotWithPctchage(data, title,  mode, y1_title = y1_title)
 
 
-    def plotWithMa(self, window=3, title:str=' ',  mode:str='binary',y1_title:Optional[str]=None): #이동평균
+    def plotWithMa(self, window=3, title:str=' ',  mode:str='binary',y1_title:Optional[str]=None, secondary_y=True): #이동평균
         data = self._ds.rolling(window).mean().dropna().applymap(lambda x: round(x,1))
-
-        return PlotvizBasic.plotWithPctchage(data,  title,  mode, y1_title = y1_title)
+        if secondary_y  is False:   return PlotvizBasic.plot(data, title,  mode, y1_title)  #세컨트 플랏이 false이면 보여주지 않음
+        else:   return PlotvizBasic.plotWithPctchage(data,  title,  mode, y1_title = y1_title)
     
         
-    def plot_div(self, colKey2:str, column_name:str='0',title:str=' ',  mode:str='binary', y1_title:str=''): # 두개의 데이터를 받아서 표시
+    def plot_div(self, colKey2:str, column_name:str='0',title:str=' ',  mode:str='binary', y1_title:str='', secondary_y=True): # 두개의 데이터를 받아서 표시
         
         df = self._ds.join(self.load_data_from_fred(colKey2).applymap(lambda x: round(x,1)))
         ds = pd.DataFrame(df.iloc[:,0] / df.iloc[:,1], columns=column_name)
-        return PlotvizBasic.plotWithPctchage(ds, title,  mode, y1_title)
+        if secondary_y is False:   return PlotvizBasic.plot(data, title, mode, y1_title)  # 세컨트 플랏이 false이면 보여주지 않음
+        else:   return PlotvizBasic.plotWithPctchage(ds, title,  mode, y1_title)

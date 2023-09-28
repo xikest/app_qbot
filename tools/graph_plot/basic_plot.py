@@ -15,7 +15,7 @@ import numpy as np
 class PlotvizBasic:
     @staticmethod
     def plotWithPctchage(ds, title:str=' ',  mode:str='show', y1_title:str=''):  #변화율을 표시
-        
+
         ds_pct = ds.pct_change().replace([np.inf, -np.inf], np.nan).dropna()
         max_ds = abs(ds_pct.quantile(q=0.95).max())
         min_ds = abs(ds_pct.quantile(q=0.95).min())
