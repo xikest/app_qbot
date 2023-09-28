@@ -1,5 +1,5 @@
 
-from market.stock_bs import BalanceSheet
+from bots.src_generator.src import BalanceSheet
 from tools.telegram_bot.contents import Context
 
 

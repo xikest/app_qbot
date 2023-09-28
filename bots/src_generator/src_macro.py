@@ -1,15 +1,15 @@
 from tools.telegram_bot import Context
 
 # 반환 값은 모두 리스트 값 
-from market import ShillerRatio
-from market import MarketPattern
-from market.macro import (CPI, PCE, ReatailSales, NewResidentialSales, DurableGoods, EmploymentCostIndex, GDP, Jolt,
-                          AdpNationalEmploymentReport, DiffusionIndexphiladelphia, InventoriesSalesRatio, 
-                          Fed, NFCI, CFNAI,
-                          PPI, EmpireStateManufacturingSurvey, ExistingHomeSales, IndustrialProduction, ISM, Productivity, 
-                          E_COMMERCE, ImportExport, CassFreightIndex, NewHousing, ConsumerCredit, InitialClaims, 
-                          CPI_BRA, CPI_CHN, CPI_DE, CPI_INDIA,  CPI_JPN, CPI_KR
-                          )
+from bots.src_generator.src import ShillerRatio
+from bots.src_generator.src import MarketPattern
+from bots.src_generator.src.macro import (CPI, PCE, ReatailSales, NewResidentialSales, DurableGoods, EmploymentCostIndex, GDP, Jolt,
+                                          AdpNationalEmploymentReport, DiffusionIndexphiladelphia, InventoriesSalesRatio,
+                                          Fed, NFCI, CFNAI,
+                                          PPI, EmpireStateManufacturingSurvey, ExistingHomeSales, IndustrialProduction, ISM, Productivity,
+                                          E_COMMERCE, ImportExport, CassFreightIndex, NewHousing, ConsumerCredit, InitialClaims,
+                                          CPI_BRA, CPI_CHN, CPI_DE, CPI_INDIA, CPI_JPN, CPI_KR
+                                          )
 
 class SrcMacro:
       class ShillerRatio:    
