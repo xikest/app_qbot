@@ -75,7 +75,7 @@ class CmdHandler:
         @staticmethod
         def shillerRatio():
             async   def _shillerRatio(update: Update, context: ContextTypes.DEFAULT_TYPE):
-                await   CmdHandler._sentPhoto(update, context, SrcMacro.ShillerRatio.compareWithPrice)
+                await   CmdHandler._sentPhoto(update, context, SrcMacro.ShillerRatio.listPlot)
             return CommandHandler('shiller_ratio', _shillerRatio)
 
         

@@ -14,7 +14,7 @@ from market.macro import (CPI, PCE, ReatailSales, NewResidentialSales, DurableGo
 class SrcMacro:
       class ShillerRatio:    
             @staticmethod
-            def compareWithPrice():
+            def listPlot():
                   yield Context(content = [ShillerRatio().listPlot()], dtype='img')
             
             
