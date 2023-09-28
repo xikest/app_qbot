@@ -6,7 +6,7 @@ import numpy as np
 from functools import wraps
 from typing import Union
 
-from traitlets import Float
+# from traitlets import Float
 
 
 class Timer:
@@ -14,7 +14,7 @@ class Timer:
     def now(): return datetime.utcnow() + timedelta(hours=9)
     
     @staticmethod     
-    def sleepToRelease(targetTime:datetime, delay:Union[int, Float]=0):
+    def sleepToRelease(targetTime:datetime, delay:Union[int, float]=0):
         delayDefault = 5
         try:
             sleepPeriod = (targetTime - Timer.now()).total_seconds()

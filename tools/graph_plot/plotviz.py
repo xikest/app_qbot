@@ -27,10 +27,6 @@ class PlotViz:
     self.fig = make_subplots(specs=[[{"secondary_y": True}]])
     pass     
 
-            
-            
-            
-        
   def bar(self, name=None, pct_change=False, col_idx:int or str=0,  secondary_y=False, **kwarg):
     self.fig.add_trace(make_trace(df=self.df, mode='bar', name=name, pct_change=pct_change, col_idx=col_idx, **kwarg), secondary_y=secondary_y)
     return self

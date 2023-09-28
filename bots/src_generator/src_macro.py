@@ -15,10 +15,7 @@ class SrcMacro:
       class ShillerRatio:    
             @staticmethod
             def compareWithPrice():
-                  yield Context(content = [ShillerRatio.plot('S&P 500 Real Price by Month'),
-                                           ShillerRatio.plot('S&P 500 Dividend Yield by Month'),
-                                           ShillerRatio.plot('S&P 500 Earnings Yield by Month'),
-                                           ShillerRatio.plot('S&P 500 PE Ratio by Month')], dtype='img')
+                  yield Context(content = [ShillerRatio().listPlot()], dtype='img')
             
             
       class Market:

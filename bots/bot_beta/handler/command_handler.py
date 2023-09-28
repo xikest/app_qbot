@@ -1,40 +1,31 @@
 from typing import Generator
 import asyncio
-from bots.src_generator import SrcMacro
-from bots.src_generator import SrcStocks
-from tools.telegram_bot import Context
-
-
 from telegram import ReplyKeyboardRemove, Update
 from telegram.ext import (
     CommandHandler,
     ContextTypes,
     ConversationHandler,
     MessageHandler,
-    filters,
-)
-
+    filters,)
+from bots.src_generator import SrcMacro
+from bots.src_generator import SrcStocks
+from tools.telegram_bot import Context
 # ================================================================================
 # = 이벤트 작성
 # ================================================================================
-
-    
-    
 class CmdHandler:
         @staticmethod
         async   def _sentPhoto(update: Update, context: ContextTypes.DEFAULT_TYPE, genContents:Generator):
                     context_ex:Context
                     await   update.message.reply_text(text="잠시만 기다려 주세요.")
                     # update.message.reply_text(text="잠시만 기다려 주세요.")
-                    
                     for context_ex in genContents():
                         while len(context_ex.content) > 0: 
                             await asyncio.sleep(1)
                             if context_ex.dtype == 'img': 
                                 await    update.message.reply_photo(photo=context_ex.content.pop(0))
                             elif context_ex.dtype == 'msg': 
-                                await    update.message.reply_text(text=context_ex.content.pop(0))      
-                
+                                await    update.message.reply_text(text=context_ex.content.pop(0))
 # =================================================================================================================================
 # stocks
 # =================================================================================================================================

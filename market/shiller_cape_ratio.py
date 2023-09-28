@@ -1,56 +1,68 @@
-import pandas as pd
-from tools.graph_plot.plotviz import PlotViz
-from tools.quandl.qndl import Qdl
 from datetime import datetime
-from tools.graph_plot.basic_plot import PlotvizBasic
+import pandas as pd
+import plotly.io as pio
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from tools.qndl.qndl import Qndl
 
-def DatetimeToDate(idx: datetime.timestamp) -> datetime.date:
-  return idx.date()
-
-def qndl_keys_multpl():
-    return {'SHILLER_PE_RATIO_MONTH' :'Shiller PE Ratio by Month',
-              'SP500_DIV_YIELD_MONTH' : 'S&P 500 Dividend Yield by Month',
-              'SP500_EARNINGS_YIELD_MONTH' : 'S&P 500 Earnings Yield by Month',
-              'SP500_REAL_PRICE_MONTH' : 'S&P 500 Real Price by Month',
-              'SP500_PE_RATIO_MONTH' : 'S&P 500 PE Ratio by Month'}
+# def DatetimeToDate(idx: datetime.timestamp) -> datetime.date:
+#   return idx.date()
+def prepare_dataset(qndlKeys: list = ['SHILLER_PE_RATIO_MONTH'], periods=10) -> pd.DataFrame:
+    qndl = Qndl()
+    df = qndl.getData('MULTPL', qndlKeys, periods) \
+        .ffill().resample('MS').last()
+    return df
+def get_annot(ds:pd.Series, pos:str="recent") -> tuple:
+    if pos == 'min':
+        x = ds.index[ds.argmin()]
+    elif pos == 'max':
+        x = ds.index[ds.argmax()]
+    elif pos == 'recent':
+        x = ds.sort_index().index[-1]
+    elif pos == 'first':
+        x = ds.sort_index().index[0]
+    y = ds[x]
+    if isinstance(x, datetime):
+        x_pos = x.strftime('%Y-%m')
+    else:
+        x_pos = x
+    txtPos = f'({x_pos}, {y})'
+    return {"x":x,"y":y, "text":txtPos}
 
 class ShillerRatio:
-  def __init__(self, years_from_today=10):
-    self._prepare_dataset_(years_from_today)
+  def __init__(self):
+    """
+    srp = ShillerRatio()
+    srp.plot("SHILLER_PE_RATIO_MONTH", modeBinary:bool = False)
+    srp.plot("SP500_DIV_YIELD_MONTH", modeBinary:bool = False)
+    srp.plot("SP500_EARNINGS_YIELD_MONTH", modeBinary:bool = False)
+    srp.plot("SP500_REAL_PRICE_MONTH", modeBinary:bool = False)
+    srp.plot("SP500_PE_RATIO_MONTH", modeBinary:bool = False)
+    """
+    pio.templates.default = 'plotly_white'
+    self.dictQndlKeysMultpl = {'SHILLER_PE_RATIO_MONTH': 'Shiller PE Ratio by Month',
+                          'SP500_DIV_YIELD_MONTH': 'S&P 500 Dividend Yield by Month',
+                          'SP500_EARNINGS_YIELD_MONTH': 'S&P 500 Earnings Yield by Month',
+                          'SP500_REAL_PRICE_MONTH': 'S&P 500 Real Price by Month',
+                          'SP500_PE_RATIO_MONTH': 'S&P 500 PE Ratio by Month'}
     pass
-    
-  def _prepare_dataset_(self, years_from_today):
-    self._raw_df=Qdl('MULTPL', list(qndl_keys_multpl().keys()), years_from_today).rename(qndl_keys_multpl()).data
-    self._df = self._raw_df.ffill().resample('MS').last()  #qndl에서 기본 값으로 10년 기간 데이터를 받아옴, 기본 값 사용
-    # self.df.index = self.df.index.map(DatetimeToDate)
 
-    return self
+  def plot(self, dataKey1='SHILLER_PE_RATIO_MONTH',years_from_today = 10, modeBinary:bool = True):
+    fig = make_subplots()  # 그래프 준비
+    name = self.dictQndlKeysMultpl.get(dataKey1)
+    ds1 = prepare_dataset([dataKey1], years_from_today).loc[:, dataKey1]   ## 데이터 준비, df -> ds
+    fig.add_trace(
+        go.Scatter(x = ds1.index, y = ds1, mode = 'lines', marker = dict(size = 10), name=name))
+    fig.add_annotation(get_annot(ds = ds1, pos ='recent'), showarrow=False, arrowhead=1)\
+        .add_annotation(get_annot(ds = ds1, pos ='max'),showarrow=False, arrowhead=1)\
+        .add_annotation(get_annot(ds = ds1, pos ='min'),showarrow=False, arrowhead=1) # 화살표 헤드 표시: arrowhead=1
+    if dataKey1 == 'SHILLER_PE_RATIO_MONTH':
+        fig.add_hline(y=26, annotation_text='CAPE:26',  annotation_position= 'bottom left', annotation_font_color='gray')
+        fig.add_hline(y=32, annotation_text='CAPE:32', annotation_position='bottom left', annotation_font_color='gray')
 
-  @staticmethod
-  def plot(reference='Shiller PE Ratio by Month', compare_with='S&P 500 Real Price by Month', mode='binary'):
-      return  ShillerRatio()._plot(reference, compare_with, mode)
-    
-    #
-    
-  def _plot(self, compare_with='S&P 500 Real Price by Month', reference='Shiller PE Ratio by Month',  mode='binary'):
-    reference = list(self._df.columns).index(reference)
-    compare_with=list(self._df.columns).index(compare_with)    
-    fig = (PlotViz(self._df).line(col_idx=reference)
-                               .add_annotation( pos='max', col_idx=reference).add_annotation( pos='min',  col_idx=reference).add_annotation( pos='recent',  col_idx=reference)
-                               .line(col_idx=compare_with, secondary_y=True)
-                               .add_annotation( pos='max', col_idx=compare_with, showarrow=False, yref='y2').add_annotation( pos='min', col_idx=compare_with, showarrow=False,  yref='y2').add_annotation( pos='recent', col_idx=compare_with, showarrow=False, yref='y2')
-                               .add_hline(y=26, annotation_text='CAPE:26',  annotation_position= 'bottom left', annotation_font_color='black')
-                               .add_hrect(y0=20,y1=32)
-                               .update_layout(title= f'Shiller PE Ratio Vs {compare_with}', width=500, height=700)
-                               .update_yaxes(title_text=reference).update_yaxes(title_text=compare_with, secondary_y=True)
-                               .update_xaxes())
-    if mode == 'binary': return fig.trx_to_byte()
-    elif mode == 'show': return fig.show()
- 
-  @property
-  def dataset_columns(self):
-    return pd.DataFrame(qndl_keys_multpl(), index=['name']).T
-  
-  @property
-  def dataset(self):
-    return self._df
+    fig.update_layout(title=f'{name}', width=500, height=700)
+    if modeBinary:
+        return fig.to_image(format="png", scale=2)
+    return fig.show()
+  def listPlot(self)->list:
+      return [self.plot(key) for key in self.dictQndlKeysMultpl]
