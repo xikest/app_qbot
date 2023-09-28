@@ -64,5 +64,3 @@ class ShillerRatio:
         if modeBinary:
             return fig.to_image(format="png", scale=2)
         return fig.show()
-    def listPlot(self)->"generator": #모든 그래프를 한번에 전송
-        return (self.plot(key) for key in self.dictQndlKeysMultpl)
