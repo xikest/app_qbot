@@ -14,7 +14,7 @@ from market.macro import (CPI, PCE, ReatailSales, NewResidentialSales, DurableGo
 class SrcMacro:
       class ShillerRatio:    
             @staticmethod
-            def listPlot():
+            def plot():
                   yield Context(content = [ShillerRatio().plot("SHILLER_PE_RATIO_MONTH"),
                                           ShillerRatio().plot("SP500_DIV_YIELD_MONTH"),
                                           ShillerRatio().plot("SP500_EARNINGS_YIELD_MONTH"),
