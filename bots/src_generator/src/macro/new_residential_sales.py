@@ -24,7 +24,7 @@ class NewResidentialSales:
     @staticmethod
     def housesSold(mode='binary'):
         return (PlotEconomicIdx('HSN1F').renameColumn('판매 완료 신규 주택')
-                .plot(title='판매 완료 신규 주택', mode=mode, y1_title=''))
+                .plot(title='판매 완료 신규 주택', mode=mode, y1_title='', secondary_y=False ))
         
     @staticmethod
     def monthlySupply_descr():
@@ -38,7 +38,7 @@ class NewResidentialSales:
     @staticmethod    
     def monthlySupply(mode='binary'):
         return (PlotEconomicIdx('MSACSR').renameColumn('월간 공급')
-                .plot(title='월간 공급', mode=mode, y1_title=''))
+                .plot(title='월간 공급', mode=mode, y1_title='', secondary_y=False))
 
     @staticmethod
     def medianSalesPriceforNewHousesSold_descr():
@@ -50,12 +50,12 @@ class NewResidentialSales:
     @staticmethod    
     def medianSalesPriceforNewHousesSold(mode='binary'):
         return (PlotEconomicIdx('MSPNHSUS').renameColumn('신규 주택판매 가격의 중앙값')
-                .plot(title='신규 주택판매 가격의 중앙값', mode=mode, y1_title=''))
+                .plot(title='신규 주택판매 가격의 중앙값', mode=mode, y1_title='', secondary_y=False))
         
     @staticmethod    
     def averageSalesPriceforNewHousesSold(mode='binary'):
         return (PlotEconomicIdx('ASPNHSUS').renameColumn('신규 주택판매 가격의 평균값')
-                .plot(title='신규 주택판매 가격의 평균값', mode=mode, y1_title=''))
+                .plot(title='신규 주택판매 가격의 평균값', mode=mode, y1_title='', secondary_y=False))
         
     @staticmethod
     def newHousesSoldNotStarted_descr():
@@ -66,5 +66,5 @@ class NewResidentialSales:
     @staticmethod    
     def newHousesSoldNotStarted(mode='binary'):
         return (PlotEconomicIdx('NHSDPNSS').renameColumn('대상 기간 동안 판매되었지만 착공이 시작되지 않음')
-                .plot(title='대상 기간 동안 판매되었지만 착공이 시작되지 않음', mode=mode, y1_title=''))
+                .plot(title='대상 기간 동안 판매되었지만 착공이 시작되지 않음', mode=mode, y1_title='', secondary_y=False))
     
