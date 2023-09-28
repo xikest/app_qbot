@@ -15,10 +15,10 @@ class SrcMacro:
       class ShillerRatio:    
             @staticmethod
             def plot():
-                  yield Context(content = [ShillerRatio().plot("SHILLER_PE_RATIO_MONTH"),
-                                          ShillerRatio().plot("SP500_DIV_YIELD_MONTH"),
-                                          ShillerRatio().plot("SP500_EARNINGS_YIELD_MONTH"),
-                                          ShillerRatio().plot("SP500_REAL_PRICE_MONTH"),
+                  yield Context(content = [ShillerRatio().plot("SP500_DIV_YIELD_MONTH"),
+                                          # ShillerRatio().plot("SP500_EARNINGS_YIELD_MONTH"),
+                                          # ShillerRatio().plot("SP500_EARNINGS_YIELD_MONTH"),
+                                          # ShillerRatio().plot("SP500_REAL_PRICE_MONTH"),
                                           ShillerRatio().plot("SP500_PE_RATIO_MONTH")], dtype='img')
 
 
