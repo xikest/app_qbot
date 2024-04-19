@@ -8,7 +8,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO)
 
-class BotBeta():
+class Botq():
     def __init__(self, TOKEN:Optional[str]=None):  self._TOKEN = TOKEN
  
     @property
