@@ -1,4 +1,4 @@
-nohup python3 -u bot_beta.py > log_bot_beta.log 2>&1 &
+nohup python3 -u start_qbot.py > log_botq.log 2>&1 &
 
 ps -ef|grep bot
 

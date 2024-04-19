@@ -2,7 +2,8 @@ import quandl
 
 import pandas as pd
 from tools.time.time import Periods
-from info.bot_ids import InfoQdl
+from info.sender import Sender
+# from info.bot_ids import InfoQdl
 
 
 def get_keys(keyList, pos=0):
@@ -23,7 +24,7 @@ class Qndl:
     print(df.head())
     """
     def __init__(self):
-        quandl.ApiConfig.api_key = InfoQdl.get_api()
+        quandl.ApiConfig.api_key = Sender().get_qndl_key()
         pass
     def getData(self, category, keys : list or str, periods:int=10):
         start_date, end_date = Periods.make_period(periods)
