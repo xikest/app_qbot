@@ -23,8 +23,10 @@ class PlotViz:
   
   def __init__(self, df, theme='plotly_white'):
     pio.templates.default = theme
+    font_family = "NanumGothic"  # 사용할 한글 폰트 지정
     self.df = check_instance_for_df(df).ffill() 
     self.fig = make_subplots(specs=[[{"secondary_y": True}]])
+    self.fig.update_layout(font=dict(family=font_family))
     pass     
 
   def bar(self, name=None, pct_change=False, col_idx:int or str=0,  secondary_y=False, **kwarg):
