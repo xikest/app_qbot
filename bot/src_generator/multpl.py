@@ -30,11 +30,11 @@ class Multpl:
 
         pass
 
-    def shiller_plots(self, mode_binary:bool=True) -> Generator[bytes | None, None, None]:
+    def shiller_plots(self, mode_binary:bool=True): # -> Generator[bytes | None, None, None]:
         yield from [self._plot(ds=self._data_from_multpl(url), title=title, add_recession=True, mode_binary=mode_binary)
                     for title, url in self.dict_shiller_ratio.items()]
 
-    def treasury_plots(self, mode_binary: bool = True) -> Generator[bytes | None, None, None]:
+    def treasury_plots(self, mode_binary: bool = True): # -> Generator[bytes | None, None, None]:
         ds_year10 = self._data_from_multpl(self.dict_treasury.get("10 Year Treasury Rate by Month"))
         ds_year2 = self._data_from_multpl(self.dict_treasury.get("2 Year Treasury Rate by Month"))
         ds_year_10_2 = (ds_year10 - ds_year2).dropna()
@@ -48,12 +48,12 @@ class Multpl:
             ds = self._data_from_multpl(url)
             yield self._plot(ds=ds, title=title, add_recession=True, mode_binary=mode_binary)
 
-    def us_index_plots(self, mode_binary:bool=True) -> Generator[bytes | None, None, None]:
+    def us_index_plots(self, mode_binary:bool=True): #-> Generator[bytes | None, None, None]:
         yield from [self._plot(ds=self._data_from_multpl(url), title=title, add_recession=True, mode_binary=mode_binary)
                     for title, url in self.dict_us_index.items()]
 
     def _plot(self, ds: pd.Series, title: str = None, add_recession: bool = False,
-              mode_binary: bool = True) -> bytes | None:
+              mode_binary: bool = True): # -> bytes | None:
         fig, ax = plt.subplots(figsize=(5, 5))  # 크기를 좀 더 크게 조정
         ax.plot(ds.index, ds, label='Data', color='Blue', alpha=0.5, linestyle='-')
         try:

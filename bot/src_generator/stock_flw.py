@@ -11,7 +11,7 @@ class StockFlw():
         self._stock_data= None
         pass
 
-    def cash_plot(self, symbol, mode_binary:bool=True, period='quarterly') -> Generator[bytes | None, None, None]:
+    def cash_plot(self, symbol, mode_binary:bool=True, period='quarterly'): # -> Generator[bytes | None, None, None]:
         try:
             self._stock_data = yf.Ticker(symbol)
         except:
@@ -24,7 +24,7 @@ class StockFlw():
 
         yield from [self._plot(ds=ds, expectation=expectation.round(1), suptitle=title, mode_binary=mode_binary) for title, ds, expectation in zip(dict_cashflow_q.keys(), dict_cashflow_q.values(), dict_cashflow_expectation.values())]
 
-    def _plot(self, ds: pd.Series, expectation:float, suptitle: str = None, mode_binary: bool = True) -> bytes | None:
+    def _plot(self, ds: pd.Series, expectation:float, suptitle: str = None, mode_binary: bool = True): # -> bytes | None:
         ds = ds.sort_index()
         ds.index = ds.index.map(lambda date: date.strftime('%y-%m'))
         fig, ax = plt.subplots(figsize=(5, 5))
@@ -65,7 +65,7 @@ class StockFlw():
         return pd.Series(
             self._call_from_cashflow('Net Income From Continuing Operations', period) / self._call_from_balance_sheet('Total Assets', period),
             name='자산 대비 수익 창출 능력 (Income/Assets)')*100
-    def _call_from_cashflow(self, key = 'Net Income From Continuing Operations',  period:str= 'quarterly') ->pd.DataFrame | None:
+    def _call_from_cashflow(self, key = 'Net Income From Continuing Operations',  period:str= 'quarterly'): # ->pd.DataFrame | None:
         try:
             if period == 'quarterly' :
                 return self._stock_data.quarterly_cashflow.loc[key,:]
@@ -73,7 +73,7 @@ class StockFlw():
                 return self._stock_data.cashflow.loc[key,:]
         except:
             return None
-    def _call_from_balance_sheet(self, key='Total Assets', period: str = 'quarterly')->pd.DataFrame | None:
+    def _call_from_balance_sheet(self, key='Total Assets', period: str = 'quarterly'): #->pd.DataFrame | None:
         try:
             if period == 'quarterly':
                 return self._stock_data.quarterly_balance_sheet.loc[key, :]

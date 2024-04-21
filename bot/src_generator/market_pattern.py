@@ -18,7 +18,7 @@ class MarketPattern:
       self.dict_periods = {"m":"month", "w":"week"}
       pass
 
-  def sharpe_plot(self, mode_binary:bool=True) -> Generator[bytes | None, None, None]:
+  def sharpe_plot(self, mode_binary:bool=True): # -> Generator[bytes | None, None, None]:
       start, end = Periods.make_period(periods=1)
       df = self._prepare_dataset(symbols=self.dict_market_symbols, start=start, end=end)
       yield from [self._plot(self._calculate_sharpe_ratio(df=df, period=period),
@@ -38,7 +38,7 @@ class MarketPattern:
       sharpe_ratio = sharpe_ratio.sort_index(ascending=True)
       return sharpe_ratio
 
-  def _plot(self, df: pd.DataFrame, mode_binary: bool = True, title: str=None) -> bytes | None:
+  def _plot(self, df: pd.DataFrame, mode_binary: bool = True, title: str=None): # -> bytes | None:
       plt.figure(figsize=(4, 10))  # Size is given in inches in Matplotlib
       period = title.split("by")[1].strip().lower() # 추출
       if period == 'week':
