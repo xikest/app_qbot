@@ -46,12 +46,10 @@ class MarketPattern:
           df.index = df.index.map(lambda idx: idx.strftime('%W (%y-%m)'))
           df = df.apply(lambda sharpe: np.where(sharpe > 0, 1, np.where(sharpe < 0, -1, 0)))
       else: #period is 'm':
-          # annot_data = np.where(df != 0, (df*100).astype(int), '')
           annot_data = (df*100).astype(int)
           df.index = df.index.map(lambda idx: idx.strftime('%y-%m'))
       max=df.max().max()*0.8 # 히트맵 스코프 80%
       ax = sns.heatmap(df, cmap="cividis", vmax=max, vmin=-max, cbar=False, annot=annot_data, fmt="")
-      ax.grid(True, which='both', color='gray', linewidth=0.3, linestyle='-')
       ax.set_title(title)
       ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
       ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
