@@ -34,8 +34,7 @@ class CmdHandler:
                                                Context(content=StockFlw().cash_plot(symbol=symbol), dtype='img'))
                 except:
                     await update.message.reply_text(f"{symbol}을 찾을 수 없습니다.")
-                await update.message.reply_text("ticker를 입력해주세요. 종료하려면 'cancel'을 입력해주세요.")
-
+                await update.message.reply_text("ticker를 입력해주세요. 종료하려면 '/x'을 입력해주세요.")
             async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
                 await update.message.reply_text(
                     'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardRemove())
@@ -43,7 +42,7 @@ class CmdHandler:
 
             return ConversationHandler(entry_points=[CommandHandler('stock_flow', stock_flw_start)],
                                         states={0: [MessageHandler(filters.TEXT & ~filters.COMMAND, _cash_flow)],},
-                                        fallbacks=[CommandHandler('cancel', cancel)])
+                                        fallbacks=[CommandHandler('x', cancel)])
 
                     
        

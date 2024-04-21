@@ -20,7 +20,7 @@ class BotHandler:
 
     @staticmethod
     async def reply_message(update: Update, context: Context) -> None:
-        # await update.message.reply_text(text="잠시만 기다려 주세요.")
+        await update.message.reply_text(text="잠시만 기다려 주세요.")
         for content in context.content:
             if context.dtype == 'img':
                 await update.message.reply_photo(photo=content)
