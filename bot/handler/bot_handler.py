@@ -8,7 +8,8 @@ from typing import Generator
 @dataclass
 class Context:
     dtype: Optional[str] = None
-    content: Generator[bytes | str | None, None, None] = None
+    content: Generator = None
+    # content: Generator[bytes | str | None, None, None] = None
 
 class BotHandler:
     @staticmethod
