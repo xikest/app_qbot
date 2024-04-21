@@ -14,13 +14,13 @@ class Context:
 class BotHandler:
     @staticmethod
     def start():
-        async   def _start(update: Update, context: CallbackContext):
-            await   update.message.reply_text(text="I'm a bot, please talk to me!")
+        async def _start(update: Update, context: CallbackContext):
+            await   update.message.reply_text(text="hello!")
         return CommandHandler('start', _start)
 
     @staticmethod
     async def reply_message(update: Update, context: Context) -> None:
-        await update.message.reply_text(text="잠시만 기다려 주세요.")
+        # await update.message.reply_text(text="잠시만 기다려 주세요.")
         for content in context.content:
             if context.dtype == 'img':
                 await update.message.reply_photo(photo=content)
