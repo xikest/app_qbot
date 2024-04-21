@@ -39,7 +39,7 @@ class MarketPattern:
       return sharpe_ratio
 
   def _plot(self, df: pd.DataFrame, mode_binary: bool = True, title: str=None): # -> bytes | None:
-      plt.figure(figsize=(4, 10))  # Size is given in inches in Matplotlib
+      plt.figure(figsize=(5, 10))  # Size is given in inches in Matplotlib
       period = title.split("by")[1].strip().lower() # 추출
       if period == 'week':
           annot_data=False
