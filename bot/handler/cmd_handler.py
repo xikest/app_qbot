@@ -28,7 +28,7 @@ class CmdHandler:
                 return 0
             async def _cash_flow(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 symbol = update.message.text
-                await update.message.reply_text(f'입력한 ticker는 {symbol} 입니다.')
+                await update.message.reply_text(f'{symbol}를 찾습니다.')
                 try:
                     await BotHandler.reply_message(update,
                                                Context(content=StockFlw().cash_plot(symbol=symbol), dtype='img'))
