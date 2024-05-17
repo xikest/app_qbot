@@ -1,0 +1,12 @@
+{
+    "indicators": {
+        "shiller_ratio" : {
+            "https://www.multpl.com/shiller-pe/table/by-month": "Shiller PE Ratio by Month",
+            "https://www.multpl.com/s-p-500-historical-prices/table/by-month": "S&P 500 Historical Prices by Month",
+            "https://www.multpl.com/s-p-500-earnings/table/by-month": "S&P 500 Earnings by Month",
+            "https://www.multpl.com/s-p-500-dividend-yield/table/by-month":  "S&P 500 Dividend Yield by Month : %",
+            "https://www.multpl.com/s-p-500-pe-ratio/table/by-month": "S&P 500 PE Ratio by Month"
+        }
+    },
+    "descr": {}
+}

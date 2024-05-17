@@ -1,0 +1,202 @@
+{
+    "indicators": {
+        "sectors": {
+            "XLC": "Communication Services",
+            "XLY": "Consumer Discretionary",
+            "XLP": "Consumer Staples",
+            "XLE": "Energy",
+            "XLF": "Financials",
+            "XLV": "Health Care",
+            "XLI": "Industrials",
+            "XLK": "Technology",
+            "XLB": "Materials",
+            "XLRE": "Real Estate",
+            "XLU": "Utilities",
+            "TLT": "Treasury",
+            "TIP": "Inflation",
+            "KEUA": "EU Carbon",
+            "GLD": "Gold"
+        },
+        "correlation_chn": {
+            "TSLA": "Tesla",
+            "NKE": "Nike",
+            "SBUX": "Starbucks",
+            "AAPL": "Apple"
+        },
+        "social": {
+            "META": "Meta"
+        },
+        "contents": {
+            "DIS": "Disney",
+            "NFLX": "Netflix",
+            "SONY": "Sony"
+        },
+        "hyper_scaler": {
+            "AMZN": "Amazon",
+            "GOOG": "Alphabet",
+            "MSFT": "Microsoft"
+        },
+        "communication": {
+            "TMUS": "T-Mobile",
+            "VZ": "Verizon",
+            "CMCSA": "Comcast"
+        },
+        "consumer_discretionary": {
+            "HD": "Home Depot",
+            "MCD": "McDonald",
+            "GM": "General Motors Company",
+            "F": "Ford Motor Company"
+        },
+        "consumer_staples": {
+            "PG": "Procter & Gamble",
+            "KO": "Coca-Cola",
+            "PEP": "PepsiCo",
+            "WMT": "Walmart",
+            "COST": "Costco",
+            "MO": "Altria",
+            "KMB": "Kimberly-Clark",
+            "CL": "Colgate",
+            "V": "VISA",
+            "AXP": "AMEX"
+        },
+        "energy_fossil": {
+            "XOM": "Exxon Mobil",
+            "CVX": "Chevron",
+            "SLB": "Schlumberger",
+            "HES": "Hess Corporation",
+            "OXY": "Occidental",
+            "URA": "Uranium"
+        },
+        "energy_green": {
+            "URA": "Uranium",
+            "TAN": "Sun-light energy",
+            "FSLR": "First Solar",
+            "RUN": "Sunrun",
+            "FAN": "Wind energy"
+        },
+        "financials": {
+            "BRK-B": "Berkshire Hathaway",
+            "JPM": "JPMorgan",
+            "BAC": "Bank of America",
+            "C": "Citi",
+            "WFC": "Wells Fargo",
+            "GS": "Goldman Sachs",
+            "MS": "Morgan Stanley",
+            "BLK": "BlackRock"
+        },
+        "health_care": {
+            "JNJ": "Johnson & Johnson",
+            "PFE": "Pfizer",
+            "UNH": "UnitedHealth Group Incorporated",
+            "ABBV": "AbbVie",
+            "MRK": "Merck",
+            "AMGN": "Amgen",
+            "TMO": "Thermo Fisher Scientific",
+            "LLY": "Eli Lilly",
+            "BIIB": "Biogen",
+            "MRNA": "Moderna"
+        },
+        "defence": {
+            "LMT": "Lockheed Martin",
+            "RTX": "Raytheon",
+            "GD": "General Dynamics",
+            "NOC": "Northrop"
+        },
+        "water": {
+            "PIO": "global water etf",
+            "PHO": "US water etf",
+            "AWK": "American Water Works Company",
+            "AWR": "American States Water Company",
+            "CWT": "California Water Service Group",
+            "XYL": "Xylem"
+        },
+        "food": {
+            "CMG": "Chipotle Mexican Grill",
+            "QSR": "Restaurant Brands International",
+            "MCD": "McDonald's",
+            "KR": "Kroger",
+            "USFD": "US Foods Holding Corp",
+            "TSN": "Tyson Foods"
+        },
+        "semicon": {
+            "AMAT": "Applied Materials",
+            "LRCX": "Lam Research",
+            "ASML": "ASML Holding NV",
+            "TSM": "Taiwan Semiconductor Manufacturing Company",
+            "MU": "Micron Technology",
+            "INTC": "Intel",
+            "ON": "ON Semiconductor",
+            "NXPI": "NXP Semiconductors",
+            "AVGO": "Broadcom",
+            "TXN": "Texas Instruments",
+            "NVDA": "NVIDIA",
+            "QCOM": "Qualcomm",
+            "MRVL": "Marvell Technology",
+            "ARM": "ARM Holdings"
+        },
+        "industrials": {
+            "HON": "Honeywell",
+            "UNP": "Union Pacific",
+            "GE": "General Electric",
+            "CAT": "Caterpillar Inc.",
+            "UPS": "United Parcel Service"
+        },
+        "bond": {
+            "HYBB": "iShares US High Yield Corporate Bond ETF",
+            "LQD": "iShares iBoxx $ Investment Grade Corporate Bond ETF",
+            "HYG": "iShares iBoxx $ High Yield Corporate Bond ETF",
+            "TLT": "iShares 20+ Year Treasury Bond ETF"
+        },
+        "technology": {
+            "AAPL": "Apple",
+            "MSFT": "Microsoft",
+            "NVDA": "NVIDIA",
+            "ADBE": "Adobe",
+            "META": "Meta",
+            "AMZN": "Amazon",
+            "GOOG": "Alphabet",
+            "NFLX": "Netflix"
+        },
+        "materials": {
+            "LIN": "Linde",
+            "SHW": "Sherwin-Williams",
+            "ECL": "Ecolab",
+            "NEM": "Newmont",
+            "DD": "DuPont",
+            "DOW": "Dow",
+            "PPG": "PPG Industries",
+            "APD": "Air Products and Chemicals",
+            "CTVA": "Corteva",
+            "FCX": "Freeport-McMoRan",
+            "GDX": "gold miner",
+            "COPX": "cooper miner",
+            "ILIT": "lithium miner"
+        },
+        "real_estate": {
+            "AMT": "American Tower",
+            "PLD": "Prologis",
+            "CCI": "Crown Castle",
+            "EQIX": "Equinix",
+            "DLR": "Digital Realty Trust",
+            "SPG": "Simon Property Group",
+            "WELL": "Welltower",
+            "O": "Realty Income"
+        },
+        "utilities": {
+            "IDU": "iShares DJ Utility Sector Index Fund",
+            "VPU": "Vanguard Utilities ETF",
+            "XLU": "Utilities Select Sector SPDR Fund",
+            "NEE": "NextEra Energy",
+            "DUK": "Duke Energy",
+            "SO": "Southern Company",
+            "EXC": "Exelon",
+            "D": "Dominion Energy",
+            "AEP": "American Electric Power",
+            "SRE": "Sempra Energy"},
+        "infra": {
+            "GRID": "First Trust Nasdaq Clean Edge Smart Grid Infrastructure Index Fund",
+            "PAVE": "Global X U.S. Infrastructure Development ETF"
+        }
+    },
+    "descr": {}
+}

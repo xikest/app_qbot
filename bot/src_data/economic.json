@@ -1,0 +1,139 @@
+{
+    "indicators": {
+        "inflation": {
+            "CPILFESL": "Core CPI",
+            "CORESTICKM159SFRBATL": "CPI Sticky less Food and Energy",
+            "CUSR0000SAM2": "CPI Medical",
+            "CUSR0000SAH1": "CPI Housing",
+            "CUSR0000SEHA": "CPI Housing Rent",
+            "PI": "Personal Income",
+            "DSPIC96": "Real Disposable Personal Income",
+            "A068RC1": "Personal Expenditures",
+            "PCE": "PCE Personal Consumption Expenditures",
+            "B069RC1": "Interest Expenses",
+            "PCEDG": "Durable Goods Expenditures",
+            "PCEC96": "PCE Real Personal Consumption Expenditures",
+            "PCEPI": "Personal Consumption Expenditures Chain Type_ Monthly",
+            "PPIFIS": "PPI Final Demand",
+            "PPIFES": "PPI Final Demand less Food and Energy"
+        },
+        "recession": {
+            "JTSJOL": "Job Openings - Total Nonfarm",
+            "JTS1000JOL": "Job Openings - Private",
+            "JTS9000JOL": "Job Openings - Government",
+            "JTSHIL": "Hires - Total Nonfarm",
+            "JTS1000HIL": "Hires - Private",
+            "JTS9000HIL": "Hires - Government",
+            "IC4WSA": "Initial Claims - 4Week Average",
+            "IURSA": "Insured Unemployment Rate"
+        },
+        "economic_activity": {
+            "INDPRO": "Industrial Production Index",
+            "IPB52300S": "Defense and Space Equipment Production",
+            "IPMAN": "Manufacturing Production",
+            "HOUST": "Housing Starts",
+            "PERMIT": "New Residential Building Permits",
+            "DGORDER": "Durable Goods Orders",
+            "NEWORDER": "New Orders for Non defense Capital Goods Excluding Aircraft"
+        },
+        "consumer_behavior": {
+            "RSAFS": "Advance Retail Sales",
+            "MRTSSM44X72USS": "Retail Sales",
+            "TOTALSL": "Total Consumer Credit Outstanding",
+            "EXHOSLUSM495S": "Existing Home Sales",
+            "HOSINVUSM495N": "Existing Home Inventory"
+        },
+        "financial_health": {
+            "DFF": "Federal Funds Effective Rate",
+            "M2V": "M2 Velocity",
+            "WALCL": "Federal Reserve Bank Total Assets",
+            "CIVPART": "Civilian Labor Force Participation Rate",
+            "CES0500000003": "Average Hourly Earnings",
+            "LNS13025703": "Long-Term Unemployment Rate",
+            "NCBCMDPMVCE": "Non financial Corporate Business Debt",
+            "CMDEBT": "Business and Household Debt"
+        }
+    },
+    "descr": {
+        "inflation": {
+            "cpi": {
+                "CPILFESL": "Core CPI excludes items with high volatility, serving as a crucial metric for central bank's inflation assessment.",
+                "CORESTICKM159SFRBATL": "CPI Sticky less Food and Energy tracks the price changes of goods and services with low price volatility over the long term.",
+                "CUSR0000SAM2": "CPI Medical reflects the changes in prices of medical services and products, essential for inflation assessment.",
+                "CUSR0000SAH1": "CPI Housing represents the changes in housing-related costs, evaluating the inflation impact on the housing market.",
+                "CUSR0000SEHA": "CPI Housing Rent reflects the changes in rental housing costs, measuring inflation pressure on consumer housing expenses."
+            },
+            "pce": {
+                "PI": "Personal Income data reflects overall income level changes in the economy, influencing consumer spending and inflation pressures.",
+                "DSPIC96": "Real Disposable Personal Income adjusts for inflation to represent available income, reflecting changes in consumer purchasing power.",
+                "A068RC1": "Personal Expenditures depict consumer spending patterns and economic consumption trends, used in inflation trend analysis.",
+                "PCE": "PCE Personal Consumption Expenditures represent the amount consumers spend on goods and services, a major driver of inflation.",
+                "B069RC1": "Interest Expenses indicate changes in consumer financial burden, affecting consumer spending potential and inflation.",
+                "PCEDG": "Durable Goods Expenditures represent consumer spending on durable goods, reflecting economic activity and inflation trends.",
+                "PCEC96": "PCE Real Personal Consumption Expenditures track real consumption changes excluding inflation, directly tied to economic growth.",
+                "PCEPI": "Personal Consumption Expenditures Chain Type Monthly reflects monthly consumption changes, a key indicator in evaluating consumer inflation."
+            },
+            "ppi": {
+                "PPIFIS": "Producer Price Index for Final Demand tracks industry price changes, serving as a leading indicator of inflation pressure.",
+                "PPIFES": "PPI less Food and Energy represents changes in basic goods prices, reflecting fundamental inflation trends."
+            }
+        },
+        "recession": {
+            "jolt": {
+                "JTSJOL": "Job Openings - Total Nonfarm indicates economic conditions and reflects the vitality of the job market.",
+                "JTS1000JOL": "Job Openings - Private represents trends in the private hiring market, used to assess overall economic health.",
+                "JTS9000JOL": "Job Openings - Government reflects government sector employment, aiding in overall recession analysis.",
+                "JTSHIL": "Hires: Total Nonfarm indicates new job creation, a key indicator of economic growth and recovery.",
+                "JTS1000HIL": "Hires - Private represents expansion in private sector employment, measuring the strength of private economic activity.",
+                "JTS9000HIL": "Hires - Government reflects changes in public sector employment, useful for analyzing government policies and recession impacts."
+            },
+            "initial_claim": {
+                "IC4WSA": "Initial Claims - 4Week Average can be interpreted as an early signal of recession, indicating instability in the job market.",
+                "IURSA": "Insured Unemployment Rate reflects the state of unemployment within the economy, a crucial economic indicator during recessions."
+            }
+        },
+        "economic_activity": {
+            "industrial_production": {
+                "INDPRO": "Industrial Production Index indicates the overall health of industrial production, showing the basic strength of economic activity.",
+                "IPB52300S": "Defense and Space Equipment Production reflects the production level of a specific high-value-added industry, indicating a country's technological and industrial competitiveness.",
+                "IPMAN": "Manufacturing Production represents the overall production activity in the manufacturing sector, a critical indicator of industrial-based economic growth."
+            },
+            "new_housing": {
+                "HOUST": "Housing Starts indicate the level of activity in the housing market, reflecting the economic health of the construction industry and related sectors.",
+                "PERMIT": "New Residential Building Permits serve as a leading indicator of future construction activity, providing insights into housing market outlook."
+            },
+            "durable_goods": {
+                "DGORDER": "Durable Goods Orders reflect consumer and business capital spending trends, reflecting investment activity and economic expectations.",
+                "NEWORDER": "New Orders for Nondefense Capital Goods Excluding Aircraft indicate demand for manufacturing investment, a gauge of overall economic expansion."
+            }
+        },
+        "consumer_behavior": {
+            "retail_sales": {
+                "RSAFS": "Advance Retail Sales is an early indicator of consumer spending trends and the health of consumption within the economy.",
+                "MRTSSM44X72USS": "Retail Sales represent a significant portion of consumer spending, indicating major drivers of economic activity."
+            },
+            "consumer_credit": {
+                "TOTALSL": "Total Consumer Credit Outstanding reflects household credit status and consumer spending potential, reflecting economic growth potential."
+            },
+            "existing_home_sales": {
+                "EXHOSLUSM495S": "Existing Home Sales indicate the level of activity in the real estate market and economic vitality.",
+                "HOSINVUSM495N": "Existing Home Inventory reflects the housing supply situation, providing signals for market balance and future price trends."
+            }
+        },
+        "financial_health": {
+            "monetary_policy": {
+                "DFF": "Federal Funds Effective Rate is a direct financial control tool used by the Federal Reserve to stimulate economic growth or suppress inflation.",
+                "M2V": "M2 Velocity indicates how quickly money circulates within the economy, with high circulation reflecting economic activity and low indicating potential economic downturns."
+            },
+            "labor_market_health": {
+                "CIVPART": "Civilian Labor Force Participation Rate indicates the percentage of the population participating in economic activity, with high participation rates indicating economic growth potential and low rates suggesting potential waste of human resources and economic growth decline.",
+                "CES0500000003": "Average Hourly Earnings reflect wage conditions in the labor market, with wage increases promoting consumption growth for economic expansion but excessive wage increases potentially increasing inflationary pressures.",
+                "LNS13025703": "Long-Term Unemployment Rate indicates the proportion of the population in long-term unemployment within the economy, with high long-term unemployment indicating severe and persistent economic problems, potentially becoming a major obstacle in economic recovery."
+            },
+            "public_and_private_debt": {
+                "NCBCMDPMVCE": "Nonfinancial Corporate Business Debt reflects the financial health of corporations, with excessive debt increasing the risk of corporate bankruptcy and posing a risk to overall financial stability.",
+                "CMDEBT": "Business and Household Debt indicate the total debt level of economic agents, with debt growth potentially stimulating short-term consumption and investment, but in the long run, it may increase the risk of financial crises and hinder economic growth."
+            }
+        }
+    }
+}

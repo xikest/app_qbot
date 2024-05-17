@@ -1,0 +1,17 @@
+{
+  "indicators": {
+    "fx": {
+      "KRW=X": "USD/KRW",
+      "CNY=X": "USD/CNY",
+      "JPY=X": "USD/JPY",
+      "INR=X": "USD/INR",
+      "EUR=X": "USD/EUR",
+      "GBP=X": "USD/GBP",
+      "RUB=X": "USD/RUB",
+      "AUD=X": "USD/AUD",
+      "BRL=X": "USD/BRL",
+      "MXN=X": "USD/MXN"
+    }
+  },
+  "descr": {}
+}

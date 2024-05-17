@@ -1,0 +1,32 @@
+{
+  "indicators": {
+    "energy": {
+      "NG=F": "Natural Gas",
+      "CL=F": "Crude Oil"
+    },
+    "valuable": {
+      "GC=F": "Gold",
+      "SI=F": "Silver"
+    },
+    "development": {
+      "HG=F": "Copper",
+      "ALI=F": "Aluminum",
+      "PA=F": "Palladium",
+      "PL=F": "Platinum"
+
+    },
+    "food": {
+      "ZW=F": "Wheat",
+      "KC=F": "Coffee",
+      "ZC=F": "Corn",
+      "CT=F": "Cotton",
+      "SB=F": "Sugar",
+      "CC=F": "Cocoa",
+      "ZS=F": "Soybeans",
+      "ZL=F": "Soybean Oil",
+      "HE=F": "pig meat",
+      "LE=F": "cow"
+    }
+  },
+  "descr": {}
+}
