@@ -23,7 +23,7 @@ def validate_date(func):
         start = kwargs.get('start')
         end = kwargs.get('end')
         periods = kwargs.get('periods')
-        if periods is None: periods = 2
+        if periods is None: periods = 3
 
         if isinstance(start, str):
             start = pd.to_datetime(start)

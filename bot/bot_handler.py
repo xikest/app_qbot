@@ -72,14 +72,14 @@ class EconomicIdx:
     def inlflation():
         async def _inlflation(update: Update, context: ContextTypes.DEFAULT_TYPE):
                await BotHandler.reply_message(update,
-                                           Context(content=EconomicIndicators().requests("inflation"), dtype='img'))
+                                           Context(content=EconomicIndicators().requests("inflation", periods=5), dtype='img'))
         return CommandHandler('inlflation', _inlflation)
 
     @staticmethod
     def recession():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=EconomicIndicators().requests("recession"), dtype='img'))
+                                           Context(content=EconomicIndicators().requests("recession", periods=5), dtype='img'))
 
         return CommandHandler('recession', _function)
 
@@ -87,7 +87,7 @@ class EconomicIdx:
     def economic_activity():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=EconomicIndicators().requests("economic_activity"),
+                                           Context(content=EconomicIndicators().requests("economic_activity", periods=5),
                                                    dtype='img'))
 
         return CommandHandler('economic_activity', _function)
@@ -96,7 +96,7 @@ class EconomicIdx:
     def consumer_behavior():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=EconomicIndicators().requests("consumer_behavior"),
+                                           Context(content=EconomicIndicators().requests("consumer_behavior", periods=5),
                                                    dtype='img'))
 
         return CommandHandler('consumer_behavior', _function)
@@ -105,7 +105,7 @@ class EconomicIdx:
     def financial_health():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=EconomicIndicators().requests("financial_health"),
+                                           Context(content=EconomicIndicators().requests("financial_health", periods=5),
                                                    dtype='img'))
 
         return CommandHandler('financial_health', _function)
@@ -115,7 +115,7 @@ class CommodityIdx:
     def energy():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=CommodityIndicators().requests("energy"), dtype='img'))
+                                           Context(content=CommodityIndicators().requests("energy", periods=5), dtype='img'))
 
         return CommandHandler('energy', _function)
 
@@ -123,7 +123,7 @@ class CommodityIdx:
     def valuable():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=CommodityIndicators().requests("valuable"), dtype='img'))
+                                           Context(content=CommodityIndicators().requests("valuable", periods=5), dtype='img'))
 
         return CommandHandler('valuable', _function)
 
@@ -131,7 +131,7 @@ class CommodityIdx:
     def development():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=CommodityIndicators().requests("valuable"), dtype='img'))
+                                           Context(content=CommodityIndicators().requests("development", periods=5), dtype='img'))
 
         return CommandHandler('development', _function)
 
@@ -139,7 +139,7 @@ class CommodityIdx:
     def food():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=CommodityIndicators().requests("food"), dtype='img'))
+                                           Context(content=CommodityIndicators().requests("food", periods=5), dtype='img'))
 
         return CommandHandler('food', _function)
 
@@ -332,7 +332,7 @@ class FxIdx:
     def fx():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=FxIndicators().requests("fx"), dtype='img'))
+                                           Context(content=FxIndicators().requests("fx", periods=5), dtype='img'))
 
         return CommandHandler('fx', _function)
 
@@ -341,6 +341,6 @@ class MultplIdx:
     def shiller_ratio():
         async def _function(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await BotHandler.reply_message(update,
-                                           Context(content=MultplIndicators().requests("shiller_ratio"), dtype='img'))
+                                           Context(content=MultplIndicators().requests("shiller_ratio", periods=5), dtype='img'))
 
         return CommandHandler('shiller_ratio', _function)
