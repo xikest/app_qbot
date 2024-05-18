@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 from functools import wraps
 from typing import Hashable, Tuple
+
 from pandas import Series
 from matplotlib.dates import DateFormatter
 import matplotlib.dates as mdates
@@ -246,7 +247,7 @@ def _add_horiz_min_max(ax: plt.axes, ds: Series, min_label: str = "CAPE:26", max
     return ax
 
 
-def _add_pct_change(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> tuple[plt.Figure, plt.Axes]:
+def _add_pct_change(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.Figure, plt.Axes]:
     def _draw_pct_change(ax: plt.Axes, ds_pct_change: pd.Series, color='blue',
                          suffix: str = "%") -> plt.Axes:
         ax.fill_between(ds_pct_change.index, ds_pct_change, color=color, alpha=0.1)  # 색을 채우는 부분
@@ -267,7 +268,7 @@ def _add_pct_change(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> tuple[plt.F
     return fig, ax
 
 
-def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> tuple[plt.Figure, plt.Axes]:
+def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.Figure, plt.Axes]:
     key = str(ds.name)
     cf = CashFlow(symbol=key)
 
@@ -288,7 +289,7 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> tuple[plt.
         _add_annotation(ax, ds_exp, pos="middle", suffix=suffix, visible_index=False)
         return ax
 
-    def _add_stock_info(fig: plt.Figure, ax: plt.Axes, dict_info: dict) -> tuple[plt.Figure, plt.Axes]:
+    def _add_stock_info(fig: plt.Figure, ax: plt.Axes, dict_info: dict) -> Tuple[plt.Figure, plt.Axes]:
         long_name = dict_info.get("long name")
         if long_name is not None:
             fig.suptitle(f"{long_name}\n")
