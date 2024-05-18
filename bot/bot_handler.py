@@ -33,13 +33,7 @@ class BotHandler:
     def help():
         async def _help(update: Update, context: CallbackContext):
             await  update.message.reply_text(text =
-"""recession- economic_recession
-inlflation- economic_inflation
-energy- commodity_energy
-valuable- commodity_valuable
-development- commodity_development
-food- commodity_food
-sectors- stock_sectors
+"""sectors- stock_sectors
 correlation_chn- stock_correlation_chn
 social- stock_social
 contents- stock_contents
@@ -62,6 +56,12 @@ materials- stock_materials
 real_estate- stock_real_estate
 utilities- stock_utilities
 infra- stock_infra
+recession- economic_recession
+inlflation- economic_inflation
+energy- commodity_energy
+valuable- commodity_valuable
+development- commodity_development
+food- commodity_food
 fx- fx
 shiller_ratio- multpl_shiller_ratio""")
         return CommandHandler('help', _help)

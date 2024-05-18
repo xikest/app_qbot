@@ -12,7 +12,7 @@ class CommodityIndicators(Indicators):
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'GC=F', name: str = None,
-                 start: str = None, end: str = None, *args, **kwargs) -> Series:
+                 start: str = None, end: str = None, periods=5, *args, **kwargs) -> Series:
         ds = yf.Ticker(key).history(start=start, end=end).Close.round(1)
         ds.name = name
         return ds

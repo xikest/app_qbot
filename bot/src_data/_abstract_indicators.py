@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import os
 
+
 class Indicators(ABC):
     def __init__(self, indicators_file: str):
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -15,20 +16,18 @@ class Indicators(ABC):
         self.dict_descr = data.get('descr')
 
     @abstractmethod
-    def _request(self, key: str, **kwargs):
+    def _request(self, key: str, periods: int = None, **kwargs):
         pass
 
-    def requests(self, key_indicator: str = 'inflation', start=None, end=None, periods=None) -> Generator:
+    def requests(self, key_indicator: str = 'inflation', start: str = None, end: str = None,
+                 periods: int = None) -> Generator:
         dict_group = self.dict_indicators.get(key_indicator, {})
-        yield from [self._request(key=key, name=name, start=start, end=end, periods=periods)[0] for key, name in dict_group.items()]
+        yield from [self._request(key=key, name=name, start=start, end=end, periods=periods)[0] for key, name in
+                    dict_group.items()]
 
         # dict_series = {name: self._request(key=key, name=name, start=start, end=end, periods=periods) for key, name in dict_group.items()}
         # df = pd.DataFrame(dict_series).dropna()
         # return df
-
-
-
-
 
     def __repr__(self):
         try:

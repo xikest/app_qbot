@@ -17,6 +17,9 @@ import yfinance as yf
 def validate_date(func):
     @wraps(func)
     def wrapper(self, key: str, *args, **kwargs):
+        start:str
+        end:str
+        periods:int
         start = kwargs.get('start')
         end = kwargs.get('end')
         periods = kwargs.get('periods')
