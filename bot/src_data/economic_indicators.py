@@ -1,7 +1,6 @@
 from pandas import Series
 from fredapi import Fred
 import os
-from typing import BinaryIO
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
 
@@ -17,7 +16,7 @@ class EconomicIndicators(Indicators):
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'CPIAUCSL', name: str = None,
-                 start: str = None, end: str = None, *args, **kwargs) -> Series | BinaryIO:
+                 start: str = None, end: str = None, *args, **kwargs) -> Series:
         ds = Fred(api_key=self.api_key).get_series(key, observation_start=start, observation_end=end)
         ds.name = name
         return ds

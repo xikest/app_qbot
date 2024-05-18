@@ -1,5 +1,4 @@
 from pandas import Series
-from typing import BinaryIO
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
 import pandas as pd
@@ -15,7 +14,7 @@ class MultplIndicators(Indicators):
     @index_to_datetime
     @validate_date
     def _request(self, url: str = "https://www.multpl.com/shiller-pe/table/by-month", name: str = None,
-                 start: str = "2020-01-01", end: str = None, *args, **kwargs) -> Series | BinaryIO:
+                 start: str = "2020-01-01", end: str = None, *args, **kwargs) -> Series:
         df = pd.read_html(url)[0]
         df['Date'] = pd.to_datetime(df['Date'], format='%b %d, %Y')
         df = df.set_index('Date')

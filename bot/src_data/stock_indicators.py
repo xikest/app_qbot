@@ -14,7 +14,7 @@ class StockIndicators(Indicators):
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'AAPL', name: str = None,
-                 start: str = None, end: str = None, *args, **kwargs) -> pd.Series | BinaryIO:
+                 start: str = None, end: str = None, *args, **kwargs) -> pd.Series:
         ds = yf.Ticker(ticker=key).history(start=start, end=end).Close.round(1)
         ds.name = key
         return ds

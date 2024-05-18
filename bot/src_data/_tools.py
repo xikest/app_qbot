@@ -3,7 +3,8 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 from functools import wraps
-from typing import Hashable, Tuple
+from typing import Hashable, Tuple, List, Union
+from matplotlib.figure import Figure
 
 from pandas import Series
 from matplotlib.dates import DateFormatter
@@ -94,7 +95,7 @@ class Plot:
 
     def __call__(self, func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs)-> List[Union[bytes, Figure]]:
             ds = func(*args, **kwargs)
             fig, ax = plt.subplots(figsize=(5, 5))  # 크기를 좀 더 크게 조정
 
