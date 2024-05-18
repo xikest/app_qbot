@@ -3,16 +3,14 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 from functools import wraps
-from typing import Hashable
+from typing import Hashable, Tuple
 from pandas import Series
 from matplotlib.dates import DateFormatter
 import matplotlib.dates as mdates
 import seaborn as sns
 from io import BytesIO
 import numpy as np
-import talib
 import yfinance as yf
-
 
 def validate_date(func):
     @wraps(func)
@@ -114,7 +112,7 @@ class Plot:
                 ax = _add_annotation(ax, ds, pos='min', suffix=suffix)
 
             elif self.plot_type == "bb_band":
-                upper_band, middle_band, lower_band = talib.BBANDS(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
+                upper_band, middle_band, lower_band = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
                 ax.plot(upper_band.index, upper_band, label='Upper',
                         color='Blue', alpha=0.5, linewidth=0.5, linestyle='-')
                 ax.plot(middle_band.index, middle_band, label='Middle',
@@ -122,7 +120,7 @@ class Plot:
                 ax.plot(lower_band.index, lower_band, label='Lower',
                         color='Blue', alpha=0.5, linewidth=0.5, linestyle='-')
             elif self.plot_type == "ma":
-                _, middle_band, _ = talib.BBANDS(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
+                _, middle_band, _ = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
                 ax.plot(middle_band.index, middle_band, label='Middle', color='Blue',
                         alpha=0.8, linewidth=0.8, linestyle='-')
             # 주석 추가
@@ -165,6 +163,18 @@ class Plot:
 
         return wrapper
 
+
+def bollinger_bands(ds: pd.Series, timeperiod: int = 20, nbdevup: int = 2, nbdevdn: int = 2) -> Tuple[
+    pd.Series, pd.Series, pd.Series]:
+
+    middle_band = ds.rolling(window=timeperiod).mean()
+    std_dev = ds.rolling(window=timeperiod).std()
+
+
+    upper_band = middle_band + (nbdevup * std_dev)
+    lower_band = middle_band - (nbdevdn * std_dev)
+
+    return upper_band, middle_band, lower_band
 def _add_recession_periods(ax: plt.Axes, ds: Series) -> plt.Axes:
     def _data_recession_periods() -> pd.DataFrame:
         url = 'https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States'
