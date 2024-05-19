@@ -206,7 +206,8 @@ def _add_recession_periods(ax: plt.Axes, ds: Series) -> plt.Axes:
     return ax
 
 
-def _add_annotation(ax: plt.Axes, ds: Series, pos: str = "recent", suffix: str = None, fontsize: int = 5, color='black', alpha=0.3,
+def _add_annotation(ax: plt.Axes, ds: Series, pos: str = "recent", suffix: str = None, fontsize: int = 5, color='black',
+                    alpha=0.3,
                     visible_index: bool = True) -> plt.Axes:
     x: Hashable
     if pos == 'min':
@@ -336,22 +337,21 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
 
     dict_cashflow_q = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("quarterly"),
                        "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("quarterly")}
-    dict_cashflow_y = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("yearly"), # using recent 2year
+    dict_cashflow_y = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("yearly"),  # using recent 2year
                        "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("yearly")}
     if all(v is not None for v in dict_cashflow_q.values()) and all(v is not None for v in dict_cashflow_y.values()):
-
         dict_cashflow_q_adjusted = {k: _adjust_index(ds, v) for k, v in dict_cashflow_q.items()}
         # for k, v in dict_cashflow_q_adjusted.items(): print(pd.DataFrame(v.sort_index(ascending=False)))
 
-        dict_cashflow_y_adjusted = {k: _adjust_index(ds, v.sort_index(ascending=False)[:2]) for k, v in dict_cashflow_y.items()}  #최근 2년 데이터만 사용
+        dict_cashflow_y_adjusted = {k: _adjust_index(ds, v.sort_index(ascending=False)[:2]) for k, v in
+                                    dict_cashflow_y.items()}  # 최근 2년 데이터만 사용
         # for k, v in dict_cashflow_y.items(): print(pd.DataFrame(v.sort_index(ascending=False)[:2])) #최근 2년 데이터 체크용
         # for k, v in dict_cashflow_y.items(): print(pd.DataFrame(v.sort_index(ascending=False)[:2]))  # 최근 2년 데이터 체크용
         dict_cashflow_expectation = {k: v.apply(lambda x: v.mean()) for k, v in dict_cashflow_y_adjusted.items()}
 
-
-        ds_cash_flow_operations = dict_cashflow_q_adjusted.get("Cash Flow from Operations(%)").fillna(0)
+        ds_cash_flow_operations = dict_cashflow_q_adjusted.get("Cash Flow from Operations(%)")
         ds_expectation_operations = dict_cashflow_expectation.get("Cash Flow from Operations(%)").fillna(0)
-        ds_cash_flow_assets = dict_cashflow_q_adjusted.get("Cash Flow from Assets(%)").fillna(0)
+        ds_cash_flow_assets = dict_cashflow_q_adjusted.get("Cash Flow from Assets(%)")
         ds_expectation_assets = dict_cashflow_expectation.get("Cash Flow from Assets(%)").fillna(0)
         # print("ds_cash_flow_operations")
         # print(ds_cash_flow_operations)
@@ -362,10 +362,8 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
         # print("ds_expectation_assets")
         # print(ds_expectation_assets)
 
-
         ax2 = ax.twinx()
-        ax2 = _draw_cashflow(ax2, ds_cash_flow_operations, ds_expectation_operations, color='red',
-                             suffix="% from Operations")
+        ax2 = _draw_cashflow(ax2, ds_cash_flow_operations, ds_expectation_operations, color='red', suffix="% from Operations")
         ax2 = _draw_cashflow(ax2, ds_cash_flow_assets, ds_expectation_assets, color='blue', suffix="% from Assets")
 
         def bottom_value(*args):
@@ -380,7 +378,7 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
                         ds_cash_flow_operations.max(), ds_cash_flow_assets.max())
 
         _add_annotation(ax2, ds_cash_flow_operations, pos='max', suffix='%', color='red', visible_index=False)
-        _add_annotation(ax2, ds_cash_flow_operations, pos='min', suffix='%', color='red', visible_index=False)
+        _add_annotation(ax2, ds_cash_flow_operations, pos='min', suffix='%', color='red', visible_index=True)
         ax2.set_ylim(bottom=bottom, top=top * 3)
         ax2.yaxis.set_visible(False)
 
