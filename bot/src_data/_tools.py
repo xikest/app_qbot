@@ -14,12 +14,13 @@ from io import BytesIO
 import numpy as np
 import yfinance as yf
 
+
 def validate_date(func):
     @wraps(func)
     def wrapper(self, key: str, *args, **kwargs):
-        start:str
-        end:str
-        periods:int
+        start: str
+        end: str
+        periods: int
         start = kwargs.get('start')
         end = kwargs.get('end')
         periods = kwargs.get('periods')
@@ -98,7 +99,7 @@ class Plot:
 
     def __call__(self, func):
         @wraps(func)
-        def wrapper(*args, **kwargs)-> List[Union[bytes, Figure]]:
+        def wrapper(*args, **kwargs) -> List[Union[bytes, Figure]]:
             ds = func(*args, **kwargs)
             fig, ax = plt.subplots(figsize=(5, 5))  # 크기를 좀 더 크게 조정
 
@@ -119,11 +120,11 @@ class Plot:
             elif self.plot_type == "bb_band":
                 upper_band, middle_band, lower_band = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
                 ax.plot(upper_band.index, upper_band, label='Upper',
-                        color='Blue', alpha=0.5, linewidth=0.5, linestyle='-')
+                        color='gray', alpha=0.5, linewidth=0.5, linestyle='-')
                 ax.plot(middle_band.index, middle_band, label='Middle',
                         color='Black', alpha=0.6, linewidth=0.6, linestyle='-')
                 ax.plot(lower_band.index, lower_band, label='Lower',
-                        color='Blue', alpha=0.5, linewidth=0.5, linestyle='-')
+                        color='gray', alpha=0.5, linewidth=0.5, linestyle='-')
             elif self.plot_type == "ma":
                 _, middle_band, _ = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
                 ax.plot(middle_band.index, middle_band, label='Middle', color='Blue',
@@ -171,15 +172,15 @@ class Plot:
 
 def bollinger_bands(ds: pd.Series, timeperiod: int = 20, nbdevup: int = 2, nbdevdn: int = 2) -> Tuple[
     pd.Series, pd.Series, pd.Series]:
-
     middle_band = ds.rolling(window=timeperiod).mean()
     std_dev = ds.rolling(window=timeperiod).std()
-
 
     upper_band = middle_band + (nbdevup * std_dev)
     lower_band = middle_band - (nbdevdn * std_dev)
 
     return upper_band, middle_band, lower_band
+
+
 def _add_recession_periods(ax: plt.Axes, ds: Series) -> plt.Axes:
     def _data_recession_periods() -> pd.DataFrame:
         url = 'https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States'
@@ -205,7 +206,7 @@ def _add_recession_periods(ax: plt.Axes, ds: Series) -> plt.Axes:
     return ax
 
 
-def _add_annotation(ax: plt.Axes, ds: Series, pos: str = "recent", suffix: str = None,
+def _add_annotation(ax: plt.Axes, ds: Series, pos: str = "recent", suffix: str = None, fontsize: int = 5, color='black', alpha=0.3,
                     visible_index: bool = True) -> plt.Axes:
     x: Hashable
     if pos == 'min':
@@ -214,6 +215,8 @@ def _add_annotation(ax: plt.Axes, ds: Series, pos: str = "recent", suffix: str =
         x = ds.idxmax()
     elif pos == 'recent':
         x = ds.sort_index().last_valid_index()
+    elif pos == 'first':
+        x = ds.sort_index().first_valid_index()
     elif pos == 'middle':
         middle_index = ds.index[int(len(ds) / 2)]
         x = middle_index
@@ -227,13 +230,13 @@ def _add_annotation(ax: plt.Axes, ds: Series, pos: str = "recent", suffix: str =
     else:
         x: pd.Timestamp
         if visible_index:
-            text = f"{x.strftime('%y-%m')}, {np.round(y, 1)}{suffix}"
+            text = f"{np.round(y, 1)}{suffix}, {x.strftime('%y-%m')}"
         else:
             text = f"{np.round(y, 1)}{suffix}"
     ax.annotate(text,
                 (mdates.date2num(x), y),
                 textcoords="offset points",
-                xytext=(0, 5), ha='left')
+                xytext=(0, 5), ha='left', fontsize=fontsize, color=color, alpha=alpha)
 
     return ax
 
@@ -255,7 +258,7 @@ def _add_pct_change(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.F
     def _draw_pct_change(ax: plt.Axes, ds_pct_change: pd.Series, color='blue',
                          suffix: str = "%") -> plt.Axes:
         ax.fill_between(ds_pct_change.index, ds_pct_change, color=color, alpha=0.1)  # 색을 채우는 부분
-        _add_annotation(ax, ds_pct_change, pos="recent", suffix=suffix, visible_index=False)
+        _add_annotation(ax, ds_pct_change, pos="first", suffix=suffix, visible_index=False)
         return ax
 
     ds_pct_change = ds.pct_change() * 100
@@ -290,7 +293,7 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
                        suffix: str = "% exp") -> plt.Axes:
         ax.fill_between(ds_cash_flow.index, ds_cash_flow, color=color, alpha=0.1)  # 색을 채우는 부분
         ax.plot(ds_exp.index, ds_exp, color=color, alpha=0.1)
-        _add_annotation(ax, ds_exp, pos="middle", suffix=suffix, visible_index=False)
+        _add_annotation(ax, ds_exp, pos="min", suffix=suffix, visible_index=False, color=color)
         return ax
 
     def _add_stock_info(fig: plt.Figure, ax: plt.Axes, dict_info: dict) -> Tuple[plt.Figure, plt.Axes]:
@@ -325,7 +328,7 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
                 f"Trailing PE: {dict_info.get('trailing PE')}, Forward PE: {dict_info.get('forward PE')}\n"
                 f"Overall Risk: {int(dict_info.get('overall risk'))}, Short Ratio: {dict_info.get('short ratio')}\n"
                 f"Enterprise Value: {enterprise_value}, Market Cap: {market_cap}",
-                fontsize=10
+                fontsize=6
             )
         except:
             pass
@@ -333,8 +336,8 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
 
     dict_cashflow_q = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("quarterly"),
                        "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("quarterly")}
-    dict_cashflow_y = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("yearly"),
-                       "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("yearly")}
+    dict_cashflow_y = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("yearly")[-2:], # using recent 2year
+                       "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("yearly")[-2:]}
 
     if all(v is not None for v in dict_cashflow_q.values()) and all(v is not None for v in dict_cashflow_y.values()):
         dict_cashflow_q = {k: _adjust_index(ds, v) for k, v in dict_cashflow_q.items()}
@@ -349,8 +352,22 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
         ax2 = ax.twinx()
         ax2 = _draw_cashflow(ax2, ds_cash_flow_operations, ds_expectation_operations, color='red',
                              suffix="% from Operations")
-        ax2 = _draw_cashflow(ax2, ds_cash_flow_assets, ds_expectation_assets, color='cyan', suffix="% from Assets")
-        ax2.set_ylim(bottom=0, top=250)
+        ax2 = _draw_cashflow(ax2, ds_cash_flow_assets, ds_expectation_assets, color='blue', suffix="% from Assets")
+
+        def bottom_value(*args):
+            return min(*args, 0)
+
+        def top_value(*args):
+            return max(*args, 100)
+
+        bottom = bottom_value(ds_expectation_assets.min(), ds_expectation_operations.min(),
+                              ds_cash_flow_operations.min(), ds_cash_flow_assets.min())
+        top = top_value(ds_expectation_assets.max(), ds_expectation_operations.max(),
+                        ds_cash_flow_operations.max(), ds_cash_flow_assets.max())
+
+        _add_annotation(ax2, ds_cash_flow_operations, pos='max', suffix='% (max)', color='red', visible_index=False)
+        _add_annotation(ax2, ds_cash_flow_operations, pos='min', suffix='% (min)', color='red', visible_index=False)
+        ax2.set_ylim(bottom=bottom * 1.2, top=top * 3)
         ax2.yaxis.set_visible(False)
 
     fig, ax = _add_stock_info(fig, ax, cf.get_info())
