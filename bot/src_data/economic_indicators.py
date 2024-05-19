@@ -12,7 +12,7 @@ class EconomicIndicators(Indicators):
         if api_key is None:
             self.api_key = os.getenv("fred_api_key")
 
-    @Plot(mode_binary=True, plot_type='line', secondary_plot='pct_change')
+    @Plot(mode_binary=True, plot_type='line')
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'CPIAUCSL', name: str = None,
