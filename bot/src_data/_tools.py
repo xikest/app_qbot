@@ -13,7 +13,7 @@ import seaborn as sns
 from io import BytesIO
 import numpy as np
 import yfinance as yf
-import pandas_datareader as pdr
+from fredapi import Fred
 from datetime import timedelta
 
 def validate_date(func):
@@ -297,9 +297,10 @@ def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series, y:dict = {'UNRA
     col_name = ds.name.split(':')[-1]
     y_name = y.values()
     x_name = x.values()
+    api_key = "1afc3162f75a055edf1d1a95529096cf"
     # FRED에서 실업률, 구인율, 10년 금리 데이터 가져오기
-    unemployment_rate = pdr.get_data_fred(y.keys(), start=start, end=end)  
-    job_opening_rate = pdr.get_data_fred(x.keys(), start=start, end=end)   
+    unemployment_rate = Fred(api_key=api_key).get_series(y.keys(), observation_start=start, observation_end=end)
+    job_opening_rate = Fred(api_key=api_key).get_series(x.keys(), observation_start=start, observation_end=end)
     ref_treasury = ds
 
 
