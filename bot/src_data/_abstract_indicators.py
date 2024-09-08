@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
-import pandas as pd
 from typing import Generator
-from pandas import DataFrame
 import json
 from pathlib import Path
 import os
@@ -24,10 +22,6 @@ class Indicators(ABC):
         dict_group = self.dict_indicators.get(key_indicator, {})
         yield from [self._request(key=key, name=name, start=start, end=end, periods=periods)[0] for key, name in
                     dict_group.items()]
-
-        # dict_series = {name: self._request(key=key, name=name, start=start, end=end, periods=periods) for key, name in dict_group.items()}
-        # df = pd.DataFrame(dict_series).dropna()
-        # return df
 
     def __repr__(self):
         try:

@@ -13,18 +13,18 @@ import seaborn as sns
 from io import BytesIO
 import numpy as np
 import yfinance as yf
-
+import pandas_datareader as pdr
+from datetime import timedelta
 
 def validate_date(func):
     @wraps(func)
     def wrapper(self, key: str, *args, **kwargs):
-        start: str
-        end: str
-        periods: int
         start = kwargs.get('start')
         end = kwargs.get('end')
         periods = kwargs.get('periods')
-        if periods is None: periods = 3
+
+        if periods is None:
+            periods = 3
 
         if isinstance(start, str):
             start = pd.to_datetime(start)
@@ -44,6 +44,7 @@ def validate_date(func):
 
         kwargs['start'] = start
         kwargs['end'] = end
+
         return func(self, key, *args, **kwargs)
 
     return wrapper
@@ -104,55 +105,68 @@ class Plot:
             fig, ax = plt.subplots(figsize=(5, 5))  # 크기를 좀 더 크게 조정
 
             title = ds.name
+
             try:
+                suffix = title.split(":")[-1].strip()
                 title = title.split(":")[0].strip()
-                suffix = title.split(":")[1].strip()
             except:
                 suffix = None
-            fig.suptitle(title)
+                
+            if title == 'Beveridge Curve':
+                fig, ax = _add_beveridge(fig=fig, ax=ax, ds=ds)
+                title = f'{title} with {suffix}'
+            elif title == 'Hope Curve':
+                fig, ax = _add_beveridge(fig=fig, ax=ax, ds=ds, y={'HOUST':'Housing Starts'}, x={'IR14280':'New Orders'})
+                title = f'{title} with {suffix}'
+                
 
-            if self.plot_type == "line":
-                ax.plot(ds.index, ds, label='Data', color='Blue', alpha=0.5, linestyle='-')
-                ax = _add_annotation(ax, ds, pos='recent', suffix=suffix)
-                ax = _add_annotation(ax, ds, pos='max', suffix=suffix)
-                ax = _add_annotation(ax, ds, pos='min', suffix=suffix)
+                
+            else:
+                if self.plot_type == "line":
+                    ax.plot(ds.index, ds, label='Data', color='Blue', alpha=0.5, linestyle='-')
+                    ax = _add_annotation(ax, ds, pos='recent', suffix=suffix)
+                    ax = _add_annotation(ax, ds, pos='max', suffix=suffix)
+                    ax = _add_annotation(ax, ds, pos='min', suffix=suffix)
+                    
+                elif self.plot_type == "bb_band":
+                    upper_band, middle_band, lower_band = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
+                    ax.plot(upper_band.index, upper_band, label='Upper',
+                            color='gray', alpha=0.5, linewidth=0.5, linestyle='-')
+                    ax.plot(middle_band.index, middle_band, label='Middle',
+                            color='Black', alpha=0.6, linewidth=0.6, linestyle='-')
+                    ax.plot(lower_band.index, lower_band, label='Lower',
+                            color='gray', alpha=0.5, linewidth=0.5, linestyle='-')
+                elif self.plot_type == "ma":
+                    _, middle_band, _ = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
+                    ax.plot(middle_band.index, middle_band, label='Middle', color='Blue',
+                            alpha=0.8, linewidth=0.8, linestyle='-')
+                # 주석 추가
 
-            elif self.plot_type == "bb_band":
-                upper_band, middle_band, lower_band = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
-                ax.plot(upper_band.index, upper_band, label='Upper',
-                        color='gray', alpha=0.5, linewidth=0.5, linestyle='-')
-                ax.plot(middle_band.index, middle_band, label='Middle',
-                        color='Black', alpha=0.6, linewidth=0.6, linestyle='-')
-                ax.plot(lower_band.index, lower_band, label='Lower',
-                        color='gray', alpha=0.5, linewidth=0.5, linestyle='-')
-            elif self.plot_type == "ma":
-                _, middle_band, _ = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
-                ax.plot(middle_band.index, middle_band, label='Middle', color='Blue',
-                        alpha=0.8, linewidth=0.8, linestyle='-')
-            # 주석 추가
+                if self.draw_horiz is not None:
+                    for title_draw, scope in self.draw_horiz.items():
+                        if title == title_draw:
+                            min_label = scope.split(",")[0].strip()
+                            max_label = scope.split(",")[1].strip()
+                            ax = _add_horiz_min_max(ax, ds, min_label=min_label, max_label=max_label)
 
-            if self.draw_horiz is not None:
-                for title_draw, scope in self.draw_horiz.items():
-                    if title == title_draw:
-                        min_label = scope.split(",")[0].strip()
-                        max_label = scope.split(",")[1].strip()
-                        ax = _add_horiz_min_max(ax, ds, min_label=min_label, max_label=max_label)
+                if self.add_recession:
+                    ax = _add_recession_periods(ax, ds)
 
-            if self.add_recession:
-                ax = _add_recession_periods(ax, ds)
+                if self.secondary_plot == "stock_sheet":
+                    fig, ax = _add_stock_sheet(fig, ax, ds)
+                elif self.secondary_plot == "pct_change":
+                    fig, ax = _add_pct_change(fig, ax, ds)
+                
 
-            if self.secondary_plot == "stock_sheet":
-                fig, ax = _add_stock_sheet(fig, ax, ds)
-            elif self.secondary_plot == "pct_change":
-                fig, ax = _add_pct_change(fig, ax, ds)
-
-            # y축 범위 조정
-            buffer = (ds.max() - ds.min()) * 0.1  # 데이터 범위의 10%를 버퍼로 추가
-            ax.set_ylim(ds.min() - buffer, ds.max() + buffer)
-            ax.yaxis.set_visible(False)
-            ax.grid(True, which='both', linestyle='-', linewidth=0.1, color='dimgray')
-            ax.xaxis.set_major_formatter(DateFormatter('%y-%m'))
-            ax.xaxis.set_tick_params(rotation=90)
+                # y축 범위 조정
+                buffer = (ds.max() - ds.min()) * 0.1  # 데이터 범위의 10%를 버퍼로 추가
+                ax.set_ylim(ds.min() - buffer, ds.max() + buffer)
+                ax.yaxis.set_visible(False)
+                ax.grid(True, which='both', linestyle='-', linewidth=0.1, color='dimgray')
+                ax.xaxis.set_major_formatter(DateFormatter('%y-%m'))
+                ax.xaxis.set_tick_params(rotation=90)
+                
+            fig.suptitle(title)    
             plt.subplots_adjust(top=0.95)  # 상단 여백 조정
             plt.tight_layout()
             sns.despine()
@@ -276,12 +290,87 @@ def _add_pct_change(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.F
     return fig, ax
 
 
+def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series, y:dict = {'UNRATE':'Unemployment Rate'}, x:dict = {'JTSJOR':'Job Openings Rate'}) -> Tuple[plt.Figure, plt.Axes]:
+
+    start = ds.index[0]
+    end = ds.index[-1]
+    col_name = ds.name.split(':')[-1]
+    y_name = y.values()
+    x_name = x.values()
+    # FRED에서 실업률, 구인율, 10년 금리 데이터 가져오기
+    unemployment_rate = pdr.get_data_fred(y.keys(), start=start, end=end)  
+    job_opening_rate = pdr.get_data_fred(x.keys(), start=start, end=end)   
+    ref_treasury = ds
+
+
+    data = pd.concat([unemployment_rate, job_opening_rate, ref_treasury], axis=1)
+    data.columns = [y_name, x_name, col_name]
+
+    # 결측값 제거
+    data = data.ffill().resample('ME').last().dropna()
+
+    # 최근 연간 데이터 필터링
+    two_years_ago = (end - timedelta(days=365 * 2)).strftime('%Y-%m-%d')
+    recent_data = data.loc[two_years_ago:].copy()  # 복사본 생성
+
+    # 최근 데이터에서 3개월 이동평균 계산
+    recent_data[f'{y_name} MA'] = recent_data[y_name].rolling(window=6).mean()
+    recent_data[f'{x_name} MA'] = recent_data[x_name].rolling(window=6).mean()
+
+    # 최근 데이터 선택 (마지막 1개의 데이터 포인트)
+    latest_data = data.tail(1)
+
+    # 산점도 추가
+    scatter = ax.scatter(
+        data[y_name],
+        data[x_name],
+        s=data[col_name] * 50,  # 점의 크기로 10년 금리 사용
+        c=data[col_name],  # 색상으로 10년 금리 사용
+        cmap='cividis',  # 색상맵 설정
+        alpha=0.8,  # 투명도 설정
+        edgecolor='none'  # 외곽선 제거
+    )
+
+    # 색상 바 추가
+    cbar = plt.colorbar(scatter, ax=ax)
+    cbar.set_label(col_name)
+
+    # 최근 5년 데이터에 3개월 이동평균 추세선 추가
+    ax.plot(
+        recent_data[f'{y_name} MA'],
+        recent_data[f'{x_name} MA'],
+        color='red',
+        linewidth=1,
+        label='3-Month Moving Average'
+    )
+
+    # 최근 데이터 레이블 추가
+    ax.scatter(
+        latest_data[y_name],
+        latest_data[x_name],
+        s=latest_data[col_name], 
+        edgecolor='red',  # 마커 외곽선 색상 설정
+        facecolor='red',  # 마커 안쪽을 비움
+        label=f'Latest {col_name}'
+    )
+    for i, txt in enumerate(latest_data[col_name]):
+        ax.annotate(f'{txt:.2f}%', (latest_data[y_name].values[i], latest_data[x_name].values[i]),
+                    textcoords="offset points", xytext=(0,10), ha='center')
+
+    # 그래프 레이아웃 업데이트
+    ax.set_xlabel("Unemployment Rate (%)", fontsize=10,  color='gray')
+    ax.set_ylabel("Job Openings Rate (%)", fontsize=10, color='gray')
+
+    plt.legend(fontsize=8, loc='best', frameon=False, shadow=False, edgecolor='gray')
+    return fig, ax
+
+
 def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.Figure, plt.Axes]:
     key = str(ds.name)
     cf = CashFlow(symbol=key)
 
     def _adjust_index(ds1: pd.Series, ds2: pd.Series) -> pd.Series:
-        ds1 = ds1.apply(lambda x: np.NaN)
+        ds1 = ds1.apply(lambda x: np.nan)
         ds1_month = ds1.index.strftime('%Y-%m')
 
         for date, value in ds2.items():
@@ -384,6 +473,9 @@ def _add_stock_sheet(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.
 
     fig, ax = _add_stock_info(fig, ax, cf.get_info())
     return fig, ax
+
+
+
 
 
 class CashFlow:

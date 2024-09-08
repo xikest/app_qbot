@@ -1,6 +1,6 @@
 import yfinance as yf
 import pandas as pd
-from typing import BinaryIO
+# from typing import BinaryIO
 
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot

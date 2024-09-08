@@ -1,5 +1,13 @@
 {
+
+
+
     "indicators": {
+        "cycle": {      
+            "DGS10": "Beveridge Curve: 10 year yield",
+            "FEDFUNDS": "Beveridge Curve: Effective Rate"
+        },
+
         "inflation": {
             "CPILFESL": "Core CPI",
             "CORESTICKM159SFRBATL": "CPI Sticky less Food and Energy",
