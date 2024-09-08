@@ -290,22 +290,22 @@ def _add_pct_change(fig: plt.Figure, ax: plt.axes, ds: pd.Series) -> Tuple[plt.F
     return fig, ax
 
 
-def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series, y:dict = {'UNRATE':'Unemployment Rate'}, x:dict = {'JTSJOR':'Job Openings Rate'}) -> Tuple[plt.Figure, plt.Axes]:
+def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series) -> Tuple[plt.Figure, plt.Axes]:
 
     start = ds.index[0]
     end = ds.index[-1]
     col_name = ds.name.split(':')[-1]
-    y_name = y.values()
-    x_name = x.values()
+    x_name = 'Unemployment Rate'
+    y_name = 'Job Openings Rate'
     api_key = "1afc3162f75a055edf1d1a95529096cf"
     # FRED에서 실업률, 구인율, 10년 금리 데이터 가져오기
-    unemployment_rate = Fred(api_key=api_key).get_series(y.keys(), observation_start=start, observation_end=end)
-    job_opening_rate = Fred(api_key=api_key).get_series(x.keys(), observation_start=start, observation_end=end)
+    unemployment_rate = Fred(api_key=api_key).get_series('UNRATE', observation_start=start, observation_end=end)
+    job_opening_rate = Fred(api_key=api_key).get_series('JTSJOR', observation_start=start, observation_end=end)
     ref_treasury = ds
 
 
     data = pd.concat([unemployment_rate, job_opening_rate, ref_treasury], axis=1)
-    data.columns = [y_name, x_name, col_name]
+    data.columns = [x_name, y_name, col_name]
 
     # 결측값 제거
     data = data.ffill().resample('ME').last().dropna()
@@ -323,8 +323,8 @@ def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series, y:dict = {'UNRA
 
     # 산점도 추가
     scatter = ax.scatter(
-        data[y_name],
         data[x_name],
+        data[y_name],
         s=data[col_name] * 50,  # 점의 크기로 10년 금리 사용
         c=data[col_name],  # 색상으로 10년 금리 사용
         cmap='cividis',  # 색상맵 설정
@@ -338,8 +338,8 @@ def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series, y:dict = {'UNRA
 
     # 최근 5년 데이터에 3개월 이동평균 추세선 추가
     ax.plot(
-        recent_data[f'{y_name} MA'],
         recent_data[f'{x_name} MA'],
+        recent_data[f'{y_name} MA'],
         color='red',
         linewidth=1,
         label='3-Month Moving Average'
@@ -347,15 +347,15 @@ def _add_beveridge(fig: plt.Figure, ax: plt.Axes, ds: pd.Series, y:dict = {'UNRA
 
     # 최근 데이터 레이블 추가
     ax.scatter(
-        latest_data[y_name],
         latest_data[x_name],
+        latest_data[y_name],
         s=latest_data[col_name], 
         edgecolor='red',  # 마커 외곽선 색상 설정
         facecolor='red',  # 마커 안쪽을 비움
         label=f'Latest {col_name}'
     )
     for i, txt in enumerate(latest_data[col_name]):
-        ax.annotate(f'{txt:.2f}%', (latest_data[y_name].values[i], latest_data[x_name].values[i]),
+        ax.annotate(f'{txt:.2f}%', (latest_data[x_name].values[i], latest_data[y_name].values[i]),
                     textcoords="offset points", xytext=(0,10), ha='center')
 
     # 그래프 레이아웃 업데이트
