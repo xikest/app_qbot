@@ -516,13 +516,20 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         else:
             enterprise_value = ""
         
-        info_text = (
-            f"<b style='font-size: 15px;'>{title}</b><br>"
-            f"<span style='font-size: 13px;'>"
-            f"PE: {dict_info.get('trailing PE')}/{dict_info.get('forward PE')} (Trailing/Forward) | Cap: {market_cap}<br>"
-            f"Overall Risk: {int(dict_info.get('overall risk', 0))} | Short Ratio: {dict_info.get('short ratio')} | EV: {enterprise_value}<br>"
-            f"</span>"
-        )
+        
+        if market_cap !='0':
+            info_text = (
+                f"<b style='font-size: 15px;'>{title}</b><br>"
+                f"<span style='font-size: 13px;'>"
+                f"PE: {dict_info.get('trailing PE')}/{dict_info.get('forward PE')} (Trailing/Forward) | Cap: {market_cap}<br>"
+                f"Overall Risk: {int(dict_info.get('overall risk', 0))} | Short Ratio: {dict_info.get('short ratio')} | EV: {enterprise_value}<br>"
+                f"</span>"
+            )
+        else:
+            info_text = (
+                f"<b style='font-size: 15px;'>{title}</b><br>"
+            )
+            
 
         fig.update_layout(
             title={

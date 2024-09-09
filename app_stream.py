@@ -8,6 +8,7 @@ from bot.src_data.multpl import MultplIndicators
 import streamlit as st
 
 def display_indicators():
+    st.set_page_config(layout="wide")
     # Sidebar for choosing indicator type
     indicator_type = st.sidebar.selectbox(
         "Select Indicator Type", 
@@ -30,7 +31,7 @@ def display_indicators():
     # Sidebar for selecting specific indicators using checkboxes
     selected_indicators = st.sidebar.multiselect("Select Indicators", indicator_keys)
     
-    st.title(f"{indicator_type} > {', '.join(selected_indicators)}")
+    st.title(f"{indicator_type} ▶ {', '.join(selected_indicators)}")
     
     if selected_indicators:
         try:
@@ -41,7 +42,7 @@ def display_indicators():
                 fig_list.extend(indicator_class.requests(indicator, start=start))
             
             # Calculate number of columns needed
-            num_columns = 2
+            num_columns = 4
             num_figs = len(fig_list)
             num_rows = (num_figs + num_columns - 1) // num_columns  # Calculate rows needed
             
