@@ -5,10 +5,17 @@ from bot.src_data.stock_indicators import StockIndicators
 from bot.src_data.commodity_indicators import CommodityIndicators
 from bot.src_data.fx_indicators import FxIndicators
 from bot.src_data.multpl import MultplIndicators
-import streamlit as st
+
+@st.cache_data
+def fetch_indicator_data(indicator_class, selected_indicators, start=None):
+    fig_list = []
+    for indicator in selected_indicators:
+        fig_list.extend(indicator_class.requests(indicator, start=start))
+    return fig_list
 
 def display_indicators():
     st.set_page_config(layout="wide")
+    
     # Sidebar for choosing indicator type
     indicator_type = st.sidebar.selectbox(
         "Select Indicator Type", 
@@ -35,11 +42,8 @@ def display_indicators():
     
     if selected_indicators:
         try:
-            # Convert generator to list
             start = '2000-01-01' if indicator_type == "Economic Indicators" else None
-            fig_list = []
-            for indicator in selected_indicators:
-                fig_list.extend(indicator_class.requests(indicator, start=start))
+            fig_list = fetch_indicator_data(indicator_class, selected_indicators, start=start)
             
             # Calculate number of columns needed
             num_columns = 4
