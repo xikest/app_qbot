@@ -190,14 +190,14 @@ class Plot:
                 
                 
   
-            start_date = ds.index[0]
-            end_date = ds.index[-1]
+                start_date = ds.index[0]
+                end_date = ds.index[-1]
             
-            start_date= end_date - pd.DateOffset(months=18)
-            fig.update_layout(
-                xaxis=dict(
-                    rangeselector=dict(
-                        buttons=list([
+                start_date= end_date - pd.DateOffset(months=18)
+                fig.update_layout(
+                    xaxis=dict(
+                        rangeselector=dict(
+                            buttons=list([
                             dict(count=1,
                                 label="1m",
                                 step="month",
