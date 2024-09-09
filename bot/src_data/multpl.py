@@ -10,7 +10,7 @@ class MultplIndicators(Indicators):
     def __init__(self):
         super().__init__(indicators_file="multpl.json")
 
-    @Plot(mode_binary=True, plot_type="line", draw_horiz={"Shiller PE Ratio by Month": "CAPE:26, CAPE:32"})
+    @Plot(mode_binary=False, plot_type="line", draw_horiz={"Shiller PE Ratio by Month": "CAPE:26, CAPE:32"})
     @index_to_datetime
     @validate_date
     def _request(self, url: str = "https://www.multpl.com/shiller-pe/table/by-month", name: str = None,

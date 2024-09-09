@@ -8,7 +8,7 @@ class CommodityIndicators(Indicators):
     def __init__(self):
         super().__init__(indicators_file="commodity.json")
 
-    @Plot(mode_binary=True, plot_type='bb_band')
+    @Plot(mode_binary=False, plot_type='bb_band')
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'GC=F', name: str = None,

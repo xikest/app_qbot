@@ -11,7 +11,7 @@ class EconomicIndicators(Indicators):
         if api_key is None:
             self.api_key = "1afc3162f75a055edf1d1a95529096cf"
 
-    @Plot(mode_binary=True, plot_type='line')
+    @Plot(mode_binary=False, plot_type='line')
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'CPIAUCSL', name: str = None,

@@ -8,7 +8,7 @@ class FxIndicators(Indicators):
     def __init__(self):
         super().__init__(indicators_file="fx.json")
 
-    @Plot(mode_binary=True, plot_type='line')
+    @Plot(mode_binary=False, plot_type='line')
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'USD/KRW', name: str = None,

@@ -10,7 +10,7 @@ class StockIndicators(Indicators):
     def __init__(self):
         super().__init__(indicators_file="stock.json")
 
-    @Plot(mode_binary=True, plot_type='bb_band',secondary_plot="stock_sheet")
+    @Plot(mode_binary=False, plot_type='bb_band',secondary_plot="stock_sheet")
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'AAPL', name: str = None,
