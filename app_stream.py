@@ -41,7 +41,7 @@ def display_indicators():
                 fig_list.extend(indicator_class.requests(indicator, start=start))
             
             # Calculate number of columns needed
-            num_columns = 3
+            num_columns = 2
             num_figs = len(fig_list)
             num_rows = (num_figs + num_columns - 1) // num_columns  # Calculate rows needed
             
