@@ -7,10 +7,10 @@ from bot.src_data.fx_indicators import FxIndicators
 from bot.src_data.multpl import MultplIndicators
 
 @st.cache_data
-def fetch_indicator_data(indicator_class, selected_indicators, start=None):
+def fetch_indicator_data(_indicator_class, selected_indicators, start=None):
     fig_list = []
     for indicator in selected_indicators:
-        fig_list.extend(indicator_class.requests(indicator, start=start))
+        fig_list.extend(_indicator_class.requests(indicator, start=start))
     return fig_list
 
 def display_indicators():
