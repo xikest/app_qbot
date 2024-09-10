@@ -10,7 +10,7 @@ from bot.src_data.multpl import MultplIndicators
 def loading_cash(_indicator_class, selected_indicators, start=None, periods=None):
     fig_list = []
     for indicator in selected_indicators:
-        fig_list.extend(_indicator_class.requests(indicator, start=start, periods=perods))
+        fig_list.extend(_indicator_class.requests(indicator, start=start, periods=periods))
     return fig_list
 
 def display_indicators():
