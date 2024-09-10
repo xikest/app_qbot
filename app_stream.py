@@ -16,6 +16,7 @@ def loading_cash(_indicator_class, selected_indicators, start=None):
 def display_indicators():
     st.set_page_config(layout="wide")
     
+    
     # Sidebar for choosing indicator type
     indicator_type = st.sidebar.selectbox(
         "Select Indicator Type", 

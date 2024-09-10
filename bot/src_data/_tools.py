@@ -190,14 +190,14 @@ class Plot:
                 
                 
   
-            start_date = ds.index[0]
-            end_date = ds.index[-1]
+                start_date = ds.index[0]
+                end_date = ds.index[-1]
             
-            start_date= end_date - pd.DateOffset(months=18)
-            fig.update_layout(
-                xaxis=dict(
-                    rangeselector=dict(
-                        buttons=list([
+                start_date= end_date - pd.DateOffset(months=18)
+                fig.update_layout(
+                    xaxis=dict(
+                        rangeselector=dict(
+                            buttons=list([
                             dict(count=1,
                                 label="1m",
                                 step="month",
@@ -402,7 +402,7 @@ def _add_scatter(fig: go.Figure, ds: pd.Series, y: dict = {'UNRATE':'Unemploymen
         y=data[x_name],
         mode='markers',
         marker=dict(
-            size=data[col_name] * 10,  # 점의 크기를 10년 금리로 설정
+            size=data[col_name] * 5,  # 점의 크기를 10년 금리로 설정
             color=data[col_name],  # 색상으로 10년 금리 사용
             colorscale='Cividis',  # Cividis 컬러맵 적용
             showscale=True,
