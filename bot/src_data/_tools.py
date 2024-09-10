@@ -497,34 +497,43 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         title = f"{long_name}\n" if long_name else dict_info.get("symbol")
         enterprise_value = int(dict_info.get('enterprise value', 0))
         market_cap = int(dict_info.get('market cap', 0))
-        if isinstance(enterprise_value, (int, float)):
-            if enterprise_value >= 1_000_000_000_000:
-                enterprise_value = f"{round(enterprise_value / 1_000_000_000_000, 2)}T"
-                market_cap = f"{round(market_cap / 1_000_000_000_000, 2)}T"
-            elif enterprise_value >= 1_000_000_000:
-                enterprise_value = f"{round(enterprise_value / 1_000_000_000, 2)}B"
-                market_cap = f"{round(market_cap / 1_000_000_000, 2)}B"
-            elif enterprise_value >= 1_000_000:
-                enterprise_value = f"{round(enterprise_value / 1_000_000, 2)}M"
-                market_cap = f"{round(market_cap / 1_000_000, 2)}M"
-            elif enterprise_value >= 1_000:
-                enterprise_value = f"{round(enterprise_value / 1_000, 2)}K"
-                market_cap = f"{round(market_cap / 1_000, 2)}K"
-            else:
-                enterprise_value = f"{round(enterprise_value, 2)}"
-                market_cap = f"{round(market_cap, 2)}"
-        else:
-            enterprise_value = ""
+        
+        try: 
+            cap_ev = round(market_cap / enterprise_value, 2)
+        except:
+            cap_ev = None
+        
+        # if isinstance(enterprise_value, (int, float)):
+        #     if enterprise_value >= 1_000_000_000_000:
+        #         enterprise_value = f"{round(enterprise_value / 1_000_000_000_000, 2)}T"
+        #         market_cap = f"{round(market_cap / 1_000_000_000_000, 2)}T"
+        #     elif enterprise_value >= 1_000_000_000:
+        #         enterprise_value = f"{round(enterprise_value / 1_000_000_000, 2)}B"
+        #         market_cap = f"{round(market_cap / 1_000_000_000, 2)}B"
+        #     elif enterprise_value >= 1_000_000:
+        #         enterprise_value = f"{round(enterprise_value / 1_000_000, 2)}M"
+        #         market_cap = f"{round(market_cap / 1_000_000, 2)}M"
+        #     elif enterprise_value >= 1_000:
+        #         enterprise_value = f"{round(enterprise_value / 1_000, 2)}K"
+        #         market_cap = f"{round(market_cap / 1_000, 2)}K"
+        #     else:
+        #         enterprise_value = f"{round(enterprise_value, 2)}"
+        #         market_cap = f"{round(market_cap, 2)}"
+        # else:
+        #     enterprise_value = ""
         
         
-        if market_cap !='0':
+        if cap_ev is not None:
+            
             info_text = (
                 f"<b style='font-size: 15px;'>{title}</b><br>"
                 f"<span style='font-size: 13px;'>"
-                f"PE: {dict_info.get('trailing PE')}/{dict_info.get('forward PE')} (Trailing/Forward) | Cap: {market_cap}<br>"
-                f"Overall Risk: {int(dict_info.get('overall risk', 0))} | Short Ratio: {dict_info.get('short ratio')} | EV: {enterprise_value}<br>"
+                f"PE(Tr/Fw): {dict_info.get('trailing PE')}/{dict_info.get('forward PE')} | Cash: {cap_ev}<br>"
+                f"Payout: {int(dict_info.get('payout ratio', 0))}% | Dividend: {dict_info.get('dividend yield', 0)}% | Short: {dict_info.get('short ratio', 0)}"
                 f"</span>"
             )
+            
+            
         else:
             info_text = (
                 f"<b style='font-size: 15px;'>{title}</b><br>"
@@ -647,6 +656,9 @@ class CashFlow:
             self._info['forward PE'] = round(float(self._stock_data.info.get("forwardPE")), 1)
             self._info['enterprise value'] = round(float(self._stock_data.info.get("enterpriseValue")), 1)
             self._info['market cap'] = round(float(self._stock_data.info.get("marketCap")), 1)
+            self._info['payout ratio'] = round(float(self._stock_data.info.get("payoutRatio")) *100, 1)
+            self._info['dividend yield'] = round(float(self._stock_data.info.get("dividendYield")) *100, 1)
+            
         except:
             pass
         return self._info
