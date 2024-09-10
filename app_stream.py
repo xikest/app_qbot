@@ -7,10 +7,10 @@ from bot.src_data.fx_indicators import FxIndicators
 from bot.src_data.multpl import MultplIndicators
 
 @st.cache_data
-def loading_cash(_indicator_class, selected_indicators, start=None):
+def loading_cash(_indicator_class, selected_indicators, start=None, periods=None):
     fig_list = []
     for indicator in selected_indicators:
-        fig_list.extend(_indicator_class.requests(indicator, start=start))
+        fig_list.extend(_indicator_class.requests(indicator, start=start, periods=perods))
     return fig_list
 
 def display_indicators():
@@ -44,8 +44,8 @@ def display_indicators():
     if selected_indicators:
         try:
             start = '2000-01-01' if indicator_type == "Economic Indicators" else None
-            period = 2 if indicator_type != "Economic Indicators"
-            fig_list = loading_cash(indicator_class, selected_indicators, start=start, period=period)
+            periods = 2 if indicator_type != "Economic Indicators"
+            fig_list = loading_cash(indicator_class, selected_indicators, start=start, periods=periods)
             
             # Calculate number of columns needed
             num_columns = 4
