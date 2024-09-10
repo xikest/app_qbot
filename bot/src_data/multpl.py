@@ -23,5 +23,6 @@ class MultplIndicators(Indicators):
             lambda text: np.float64(text))
         ds = df.iloc[:, 0].round(1)
         ds.name = name
+        ds=ds.sort_index()
         return ds
 

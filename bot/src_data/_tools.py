@@ -103,11 +103,11 @@ class Plot:
         @wraps(func)
         def wrapper(*args, **kwargs) -> List[Union[bytes, go.Figure]]:
             ds = func(*args, **kwargs)
-            title = ds.name
+            name = ds.name
 
             try:
-                suffix = title.split(":")[-1].strip()
-                title = title.split(":")[0].strip()
+                title = name.split(":")[0].strip()
+                suffix = name.split(":")[1].strip()
             except:
                 suffix = None
 
@@ -127,7 +127,6 @@ class Plot:
                         line=dict(color='blue', width=2, dash='solid'),
                         name='Data'
                     ))
-                    
                     
                     fig = _add_annotation(fig, ds, pos='recent', suffix=suffix)
                     fig = _add_annotation(fig, ds, pos='max', suffix=suffix)
@@ -182,40 +181,29 @@ class Plot:
                 if self.add_recession:
                     fig = _add_recession_periods(fig, ds)
 
+
+                fig.update_layout(      #title
+                    title={
+                        'text': title,
+                        'x': 0.5,  # X 위치를 0.5로 설정하여 중앙 정렬
+                        'xanchor': 'center',  # X 축을 중앙에 앵커링
+                        'yanchor': 'top'  # Y 축을 상단에 앵커링
+                    }
+                )
+
+
                 if self.secondary_plot == "stock_sheet":
                     fig = _add_stock_sheet(fig, ds)
                 elif self.secondary_plot == "pct_change":
                     fig = _add_pct_change(fig, ds)
 
-                
-                
   
                 start_date = ds.index[0]
                 end_date = ds.index[-1]
-            
                 start_date= end_date - pd.DateOffset(months=18)
+
                 fig.update_layout(
                     xaxis=dict(
-                        rangeselector=dict(
-                            buttons=list([
-                            dict(count=1,
-                                label="1m",
-                                step="month",
-                                stepmode="backward"),
-                            dict(count=6,
-                                label="6m",
-                                step="month",
-                                stepmode="backward"),
-                            dict(count=1,
-                                label="YTD",
-                                step="year",
-                                stepmode="todate"),
-                            dict(count=1,
-                                label="1y",
-                                step="year",
-                                stepmode="backward")
-                        ])
-                    ),
                     rangeslider=dict(
                         visible=True
                     ),
@@ -489,7 +477,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         _add_annotation(fig, ds_exp, pos="recent", yaxis=yaxis, textposition='top left', suffix=suffix, color=color, visible_index=False)
 
         
-        
         return fig
 
     def _add_stock_info(fig: go.Figure, dict_info: dict) -> go.Figure:
@@ -502,25 +489,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
             cap_ev = round(market_cap / enterprise_value, 2)
         except:
             cap_ev = None
-        
-        # if isinstance(enterprise_value, (int, float)):
-        #     if enterprise_value >= 1_000_000_000_000:
-        #         enterprise_value = f"{round(enterprise_value / 1_000_000_000_000, 2)}T"
-        #         market_cap = f"{round(market_cap / 1_000_000_000_000, 2)}T"
-        #     elif enterprise_value >= 1_000_000_000:
-        #         enterprise_value = f"{round(enterprise_value / 1_000_000_000, 2)}B"
-        #         market_cap = f"{round(market_cap / 1_000_000_000, 2)}B"
-        #     elif enterprise_value >= 1_000_000:
-        #         enterprise_value = f"{round(enterprise_value / 1_000_000, 2)}M"
-        #         market_cap = f"{round(market_cap / 1_000_000, 2)}M"
-        #     elif enterprise_value >= 1_000:
-        #         enterprise_value = f"{round(enterprise_value / 1_000, 2)}K"
-        #         market_cap = f"{round(market_cap / 1_000, 2)}K"
-        #     else:
-        #         enterprise_value = f"{round(enterprise_value, 2)}"
-        #         market_cap = f"{round(market_cap, 2)}"
-        # else:
-        #     enterprise_value = ""
         
         
         if cap_ev is not None:
@@ -579,7 +547,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         _add_annotation(fig, ds_cash_flow_operations, pos="min", yaxis='y2', suffix='%', color='red',textposition='top right', visible_index=True)
         fig.update_layout(
             yaxis2=dict(
-                # title='Cash Flow (%)',
                 overlaying='y',
                 side='right',
                 range=[bottom, top * 3],
