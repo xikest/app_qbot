@@ -43,9 +43,9 @@ def display_indicators():
     
     if selected_indicators:
         try:
-            start = '2000-01-01' 
-            # if indicator_type == "Economic Indicators" else None
-            fig_list = loading_cash(indicator_class, selected_indicators, start=start)
+            start = '2000-01-01' if indicator_type == "Economic Indicators" else None
+            period = 2 if indicator_type != "Economic Indicators"
+            fig_list = loading_cash(indicator_class, selected_indicators, start=start, period=period)
             
             # Calculate number of columns needed
             num_columns = 4
