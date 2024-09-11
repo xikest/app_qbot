@@ -438,7 +438,9 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         
         @index_to_datetime
         def _request_dividends(key: str = 'AAPL', start: str = None, end: str = None) -> pd.Series:
-            ds = yf.Ticker(ticker=key).history(start=start, end=end).Dividends.round(1)
+            ds = yf.Ticker(ticker=key).history(start=start, end=end)
+            st.write(ds)
+            ds = ds['Dividends'].round(1)
             ds.name = key
             return ds
         
@@ -449,7 +451,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         
         dividends = _request_dividends(key=ds.name, start=start, end=end)
         dividends = dividends[dividends>0]
-        st.write(dividends)
         # 배당금과 주가 데이터를 병합
         df = pd.merge(dividends, ds, left_index=True, right_index=True)
         df.columns = ['Dividends', 'Close']
