@@ -436,11 +436,20 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
 
     def _add_dividens(fig, ds: pd.Series):
         
-        @index_to_datetime
         def _request_dividends(key: str = 'AAPL', start: str = None, end: str = None) -> pd.Series:
             ds = yf.Ticker(ticker=key).history(start=start, end=end).Dividends.round(1)
             ds.name = key
-            return ds
+            
+            if isinstance(ds, Series):
+                # Ensure the index is datetime type, convert if it's object type
+                if pd.api.types.is_object_dtype(ds.index.dtype):
+                    ds.index = pd.to_datetime(ds.index)
+                # ds index to 'YYYY-MM-DD' if it's already datetime
+                elif pd.api.types.is_datetime64_any_dtype(ds.index.dtype):
+                    ds.index = pd.to_datetime(ds.index.strftime('%Y-%m-%d'))
+                return ds
+            else:
+                return ds
         
         ds = ds.sort_index()
         idx = ds.index
