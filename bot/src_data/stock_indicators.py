@@ -17,6 +17,8 @@ class StockIndicators(Indicators):
                  start: str = None, end: str = None, *args, **kwargs) -> pd.Series:
         ds = yf.Ticker(ticker=key).history(start=start, end=end).Close.round(1)
         ds.name = key
+        if getattr(self,'to_pctchange_cum', False):
+            ds=ds.pct_change().cumsum()                
         return ds
 
 
