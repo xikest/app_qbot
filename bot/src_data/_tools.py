@@ -439,7 +439,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         @index_to_datetime
         def _request_dividends(key: str = 'AAPL', start: str = None, end: str = None) -> pd.Series:
             ds = yf.Ticker(ticker=key).history(start=start, end=end)
-            st.write(ds)
             ds = ds['Dividends'].round(1)
             ds.name = key
             return ds
