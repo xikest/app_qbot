@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 # from typing import BinaryIO
+import streamlit as st
 
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
@@ -18,7 +19,8 @@ class StockIndicators(Indicators):
         ds = yf.Ticker(ticker=key).history(start=start, end=end).Close.round(1)
         ds.name = key
         if getattr(self,'to_pctchange_cum', False):
-            ds=ds.pct_change().cumsum()                
+            ds=ds.pct_change().cumsum()  
+            st.wrtie('cum')
         return ds
 
 
