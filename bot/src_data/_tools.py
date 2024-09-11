@@ -473,8 +473,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
                     size=size +10,  
                     color=size,  
                     colorscale='Reds',
-                    cmax=1,
-                    cmin=0,
                     line=dict(
                     width=1,  
                     color='grey'  
