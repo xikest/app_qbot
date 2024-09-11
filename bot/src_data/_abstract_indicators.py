@@ -18,7 +18,7 @@ class Indicators(ABC):
         pass
 
     def requests(self, key_indicator: str = 'inflation', start: str = None, end: str = None,
-                 periods: int = None, to_pctchange_cum=False) -> Generator:
+                 periods: int = None, to_pctchange_cum : bool=False) -> Generator:
         dict_group = self.dict_indicators.get(key_indicator, {})
         yield from [self._request(key=key, name=name, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum)[0] for key, name in
                     dict_group.items()]
