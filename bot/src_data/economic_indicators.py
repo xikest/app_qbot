@@ -2,7 +2,7 @@ from pandas import Series
 from fredapi import Fred
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
-
+import streamlit as st
 
 class EconomicIndicators(Indicators):
 
@@ -19,6 +19,7 @@ class EconomicIndicators(Indicators):
         ds = Fred(api_key=self.api_key).get_series(key, observation_start=start, observation_end=end)
         ds.name = name
         #if getattr(self,'to_pctchange_cum', False):
-        if to_pctchange_cum == True:           
+        if to_pctchange_cum:           
             ds=ds.pct_change().cumsum()
+            st.write(to_pctchange_cum)
         return ds
