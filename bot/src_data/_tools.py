@@ -460,7 +460,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         max_dividends = df['Dividends'].max()
         # 정규화된 Dividends 값 계산
         if max_dividends == min_dividends:
-            size = 0.5
+            size = 0.2
             
         else:
             size = ((df['Dividends'] - min_dividends) / (max_dividends - min_dividends)) 
