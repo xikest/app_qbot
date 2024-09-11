@@ -14,6 +14,7 @@ import pandas as pd
 from typing import List, Union, Callable
 from functools import wraps
 from io import BytesIO
+from sklearn.preprocessing import StandardScaler
 
 import streamlit as st
 
@@ -281,7 +282,6 @@ def _add_recession_periods(fig: go.Figure, ds: pd.Series) -> go.Figure:
     return fig
 
 
-
 def _add_annotation(fig: go.Figure, ds: pd.Series, pos: str = "recent", suffix: str = None, fontsize: int = 12, color='black', alpha=0.3, visible_index: bool = True) -> go.Figure:
     # 주석을 추가할 위치 선택
     if pos == 'min':
@@ -431,8 +431,66 @@ def _add_scatter(fig: go.Figure, ds: pd.Series, y: dict = {'UNRATE':'Unemploymen
     return fig
 def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
     key = str(ds.name)
-                
+
+          
     cf = CashFlow(symbol=key)
+
+    def _add_dividens(fig, ds: pd.Series):
+        
+        @index_to_datetime
+        def _request_dividends(key: str = 'AAPL', start: str = None, end: str = None) -> pd.Series:
+            ds = yf.Ticker(ticker=key).history(start=start, end=end).Dividends.round(1)
+            ds.name = key
+            return ds
+        
+        ds = ds.sort_index()
+        idx = ds.index
+        start = idx[0]
+        end = idx[-1]  
+        
+        dividends = _request_dividends(key=ds.name, start=start, end=end)
+        dividends = dividends[dividends>0]
+
+        # 배당금과 주가 데이터를 병합
+        df = pd.merge(dividends, ds, left_index=True, right_index=True)
+        df.columns = ['Dividends', 'Close']
+
+        # Dividends 값을 0과 1 사이로 정규화
+        min_dividends = df['Dividends'].min()
+        max_dividends = df['Dividends'].max()
+        # 정규화된 Dividends 값 계산
+        if max_dividends == min_dividends:
+            size = 0.5
+            
+        else:
+            size = ((df['Dividends'] - min_dividends) / (max_dividends - min_dividends)) 
+
+        fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df['Close'] + 10,
+                mode='markers',
+                marker=dict(
+                    size=size +10,  
+                    color=size,  
+                    colorscale='Reds',
+                    cmax=1,
+                    cmin=0,
+                    line=dict(
+                    width=1,  
+                    color='grey'  
+                ) 
+                ),
+                text=df['Dividends'],  # 호버 시 표시할 텍스트
+                hoverinfo='text',  
+                name='Dividends'
+            )
+        )
+
+        return fig
+                    
+        
+
 
     def _adjust_index(ds1: pd.Series, ds2: pd.Series) -> pd.Series:
         ds1 = ds1.apply(lambda x: np.nan)
@@ -557,6 +615,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         )
     
     fig = _add_stock_info(fig, cf.get_info())
+    fig = _add_dividens(fig, ds=ds)
     # st.plotly_chart(fig, use_container_width=True)  
     return fig
 
