@@ -18,6 +18,7 @@ class EconomicIndicators(Indicators):
                  start: str = None, end: str = None, *args, **kwargs) -> Series:
         ds = Fred(api_key=self.api_key).get_series(key, observation_start=start, observation_end=end)
         ds.name = name
-        if getattr(self,'to_pctchange_cum', False):
+        #if getattr(self,'to_pctchange_cum', False):
+        if to_pctchange_cum == True:           
             ds=ds.pct_change().cumsum()
         return ds
