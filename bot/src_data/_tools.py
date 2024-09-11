@@ -14,6 +14,7 @@ import pandas as pd
 from typing import List, Union, Callable
 from functools import wraps
 from io import BytesIO
+from sklearn.preprocessing import StandardScaler
 
 import streamlit as st
 
