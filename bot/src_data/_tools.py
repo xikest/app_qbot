@@ -198,19 +198,19 @@ class Plot:
                     fig = _add_pct_change(fig, ds)
 
   
-                start_date = ds.index[0]
-                end_date = ds.index[-1]
-                start_date= end_date - pd.DateOffset(months=18)
+            #     start_date = ds.index[0]
+            #     end_date = ds.index[-1]
+            #     start_date= end_date - pd.DateOffset(months=18)
 
-                fig.update_layout(
-                    xaxis=dict(
-                    rangeslider=dict(
-                        visible=True
-                    ),
-                    type="date",
-                    range=[start_date, end_date]  # 데이터 범위에 맞추어 축을 제한
-                )
-            )
+            #     fig.update_layout(
+            #         xaxis=dict(
+            #         rangeslider=dict(
+            #             visible=False
+            #         ),
+            #         type="date",
+            #         range=[start_date, end_date]  # 데이터 범위에 맞추어 축을 제한
+            #     ),
+            # )
                 
             if self.mode_binary:
                 buf = BytesIO()
@@ -462,7 +462,10 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
             size = pd.Series(data=[0.5] *len(df), index=df.index)
             
         else:
-            size = ((df['Dividends'] - min_dividends) / (max_dividends - min_dividends)) 
+            size = ((df['Dividends'] - min_dividends) / (max_dividends - min_dividends))
+             
+        # 날짜와 배당금 정보를 포함한 텍스트 생성
+        hover_text = df.apply(lambda row: f"Date: {row.name.date()}<br>Dividend: {row['Dividends']}", axis=1)
 
         fig.add_trace(
             go.Scatter(
@@ -478,7 +481,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
                     color='grey'  
                 ) 
                 ),
-                text=df['Dividends'],  # 호버 시 표시할 텍스트
+                text=hover_text,  # 호버 시 표시할 텍스트
                 hoverinfo='text',  
                 name='Dividends'
             )
