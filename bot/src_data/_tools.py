@@ -450,7 +450,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         
         dividends = _request_dividends(key=ds.name, start=start, end=end)
         dividends = dividends[dividends>0]
-        # 배당금과 주가 데이터를 병합
+    
         df = pd.merge(dividends, ds, left_index=True, right_index=True)
         df.columns = ['Dividends', 'Close']
 
@@ -464,13 +464,12 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         else:
             size = ((df['Dividends'] - min_dividends) / (max_dividends - min_dividends))
              
-        # 날짜와 배당금 정보를 포함한 텍스트 생성
         hover_text = df.apply(lambda row: f"Date: {row.name.date()}<br>Dividend: {row['Dividends']}", axis=1)
 
         fig.add_trace(
             go.Scatter(
                 x=df.index,
-                y=df['Close'] + 10,
+                y=df['Close'] + 1,
                 mode='markers',
                 marker=dict(
                     size=size +10,  
