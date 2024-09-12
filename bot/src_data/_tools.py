@@ -469,7 +469,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         fig.add_trace(
             go.Scatter(
                 x=df.index,
-                y=df['Close'] + 1,
+                y=df['Close'] + 0.1,
                 mode='markers',
                 marker=dict(
                     size=size +10,  
