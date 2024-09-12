@@ -15,11 +15,12 @@ class EconomicIndicators(Indicators):
     @index_to_datetime
     @validate_date
     def _request(self, key: str = 'CPIAUCSL', name: str = None,
-                 start: str = None, end: str = None, to_pctchange_cum=False, *args, **kwargs) -> Series:
+                 start: str = None, end: str = None, *args, **kwargs) -> Series:
         ds = Fred(api_key=self.api_key).get_series(key, observation_start=start, observation_end=end)
         ds.name = name
         #if getattr(self,'to_pctchange_cum', False):
+        to_pctchange_cum = kwargs.get('to_pctchange_cum')
+        st.write(to_pctchange_cum)   
         if to_pctchange_cum:           
-            ds=ds.pct_change().cumsum()
-            st.write(to_pctchange_cum)
+            ds=ds.pct_change().cumsum()   
         return ds
