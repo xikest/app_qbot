@@ -20,8 +20,7 @@ class StockIndicators(Indicators):
         ds.name = key
 
         #if getattr(self,'to_pctchange_cum', False):
-        to_pctchange_cum = kwargs.get('to_pctchange_cum')
-        st.write(to_pctchange_cum)   
+        to_pctchange_cum = kwargs.get('to_pctchange_cum')   
         if to_pctchange_cum:           
             ds=ds.pct_change().cumsum()               
         return ds
