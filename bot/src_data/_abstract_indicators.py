@@ -14,7 +14,7 @@ class Indicators(ABC):
         self.dict_descr = data.get('descr')
 
     @abstractmethod
-    def _request(self, key: str, periods: int = None, **kwargs):
+    def _request(self, key: str, periods: int = None, *args,  **kwargs):
         pass
 
     def requests(self, key_indicator: str = 'inflation', start: str = None, end: str = None,
