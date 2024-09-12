@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from functools import wraps
-from typing import Tuple, List, Union
+from typing import Tuple, List, Union, Callable
 from pandas import Series
 from io import BytesIO
 import numpy as np
@@ -10,11 +10,6 @@ import yfinance as yf
 from fredapi import Fred
 from datetime import timedelta
 import plotly.graph_objects as go
-import pandas as pd
-from typing import List, Union, Callable
-from functools import wraps
-from io import BytesIO
-
 import streamlit as st
 
 def validate_date(func):
@@ -104,6 +99,7 @@ class Plot:
         def wrapper(*args, **kwargs) -> List[Union[bytes, go.Figure]]:
             ds = func(*args, **kwargs)
             name = ds.name
+            to_pctchange_cum = kwargs.get('to_pctchange_cum')
 
             try:
                 title = name.split(":")[0].strip()
@@ -191,26 +187,13 @@ class Plot:
                     }
                 )
 
-
                 if self.secondary_plot == "stock_sheet":
                     fig = _add_stock_sheet(fig, ds)
                 elif self.secondary_plot == "pct_change":
                     fig = _add_pct_change(fig, ds)
 
-  
-            #     start_date = ds.index[0]
-            #     end_date = ds.index[-1]
-            #     start_date= end_date - pd.DateOffset(months=18)
-
-            #     fig.update_layout(
-            #         xaxis=dict(
-            #         rangeslider=dict(
-            #             visible=False
-            #         ),
-            #         type="date",
-            #         range=[start_date, end_date]  # 데이터 범위에 맞추어 축을 제한
-            #     ),
-            # )
+            if to_pctchange_cum:
+                fig.update_layout(yaxis_title="Cumulative Return (%)")
                 
             if self.mode_binary:
                 buf = BytesIO()
@@ -437,39 +420,44 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
     def _add_dividens(fig, ds: pd.Series):
         
         @index_to_datetime
-        def _request_dividends(key: str = 'AAPL', start: str = None, end: str = None) -> pd.Series:
-            ds = yf.Ticker(ticker=key).history(start=start, end=end)
-            ds = ds['Dividends'].round(1)
-            ds.name = key
-            return ds
+        def _request_dividends(key: str = 'AAPL', select_col = 'Dividends' ,start: str = None, end: str = None) -> pd.Series:
+            df = yf.Ticker(ticker=key).history(start=start, end=end)
+            df = df[select_col].round(1)
+            df.name = key
+            return df
         
         ds = ds.sort_index()
         idx = ds.index
         start = idx[0]
         end = idx[-1]  
         
-        dividends = _request_dividends(key=ds.name, start=start, end=end)
+        dividends = _request_dividends(key=ds.name, select_col='Dividends',start=start, end=end)
         dividends = dividends[dividends>0]
-    
-        df = pd.merge(dividends, ds, left_index=True, right_index=True)
-        df.columns = ['Dividends', 'Close']
-
+        close = _request_dividends(key=ds.name, select_col='Close',start=start, end=end)
+        
+        df = pd.merge(dividends, close, left_index=True, right_index=True)
+        df = pd.merge(df, ds, left_index=True, right_index=True)
+        df.columns = ['Dividends', 'Close_price', 'Close']
+        df['dividend_ratio'] = (df['Dividends'] / df['Close_price']) * 100
+        df['dividend_ratio'] = df['dividend_ratio'].round(2)
+        
         # Dividends 값을 0과 1 사이로 정규화
         min_dividends = df['Dividends'].min()
         max_dividends = df['Dividends'].max()
         # 정규화된 Dividends 값 계산
+
         if max_dividends == min_dividends:
             size = pd.Series(data=[0.5] *len(df), index=df.index)
             
         else:
             size = ((df['Dividends'] - min_dividends) / (max_dividends - min_dividends))
-             
-        hover_text = df.apply(lambda row: f"Date: {row.name.date()}<br>Dividend: {row['Dividends']}", axis=1)
+
+        hover_text = df.apply(lambda row: f"Date: {row.name.date()}<br>Dividend: {row['Dividends']}, {row['dividend_ratio']}%", axis=1)
 
         fig.add_trace(
             go.Scatter(
                 x=df.index,
-                y=df['Close'] + 0.1,
+                y=df['Close'] + 1,
                 mode='markers',
                 marker=dict(
                     size=size +10,  
@@ -575,29 +563,28 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         )
         return fig
 
-    dict_cashflow_q = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("quarterly"),
-                       "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("quarterly")}
-    dict_cashflow_y = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating("yearly"),
-                       "Cash Flow from Assets(%)": cf.ratio_income_div_assetes("yearly")}
-    
-    
-    if all(v is not None for v in dict_cashflow_q.values()) and all(v is not None for v in dict_cashflow_y.values()):
-        dict_cashflow_q_adjusted = {k: _adjust_index(ds, v) for k, v in dict_cashflow_q.items()}
-        dict_cashflow_y_adjusted = {k: _adjust_index(ds, v.sort_index(ascending=False)[:2]) for k, v in dict_cashflow_y.items()}
-        dict_cashflow_expectation = {k: v.apply(lambda x: v.mean()) for k, v in dict_cashflow_y_adjusted.items()}
+    dict_cashflow = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating(),
+                       "Cash Flow from Assets(%)": cf.ratio_income_div_assetes()}
 
-        ds_cash_flow_operations = dict_cashflow_q_adjusted.get("Cash Flow from Operations(%)")
+    
+    if all(v is not None for v in dict_cashflow.values()):
+        dict_cashflow_adjusted = {k: _adjust_index(ds, v) for k, v in dict_cashflow.items()}
+        # dict_cashflow_y_adjusted = {k: _adjust_index(ds, v.sort_index(ascending=False)[:2]) for k, v in dict_cashflow_adjusted.items()}
+
+        dict_cashflow_expectation = {k: v.apply(lambda x: v.mean()) for k, v in dict_cashflow_adjusted.items()}
+    
+        ds_cash_flow_operations = dict_cashflow_adjusted.get("Cash Flow from Operations(%)")
         ds_expectation_operations = dict_cashflow_expectation.get("Cash Flow from Operations(%)").fillna(0)
-        ds_cash_flow_assets = dict_cashflow_q_adjusted.get("Cash Flow from Assets(%)")
+        ds_cash_flow_assets = dict_cashflow_adjusted.get("Cash Flow from Assets(%)")
         ds_expectation_assets = dict_cashflow_expectation.get("Cash Flow from Assets(%)").fillna(0)
 
+
+        # st.write(ds_cash_flow_operations)
         fig = _draw_cashflow(fig, ds_cash_flow_operations, ds_expectation_operations, color='red', suffix="% from Operations")
         fig = _draw_cashflow(fig, ds_cash_flow_assets, ds_expectation_assets, color='blue', suffix="% from Assets")
         # st.plotly_chart(fig, use_container_width=True)
-        bottom = min(ds_expectation_assets.min(), ds_expectation_operations.min(),
-                     ds_cash_flow_operations.min(), ds_cash_flow_assets.min())
-        top = max(ds_expectation_assets.max(), ds_expectation_operations.max(),
-                   ds_cash_flow_operations.max(), ds_cash_flow_assets.max())
+        bottom = min(ds_cash_flow_operations.min(), ds_cash_flow_assets.min())
+        top = max( ds_cash_flow_operations.max(), ds_cash_flow_assets.max())
         
         
         _add_annotation(fig, ds_cash_flow_operations, pos="max", yaxis='y2', suffix='%', color='red',textposition='top right', visible_index=True)
@@ -689,38 +676,54 @@ class CashFlow:
         return self._info
 
     @index_to_datetime
-    def ratio_income_div_operating(self, period: str = 'quarterly') -> pd.Series or None:
+    def ratio_income_div_operating(self) -> pd.Series | None:
         try:
-            net_income = self._net_income_from_cashflow('Net Income From Continuing Operations', period)
-            operating_cashflow = self._net_income_from_cashflow('Cash Flow From Continuing Operating Activities',
-                                                                period)
+            net_income = self._from_balance_sheet('Net Income From Continuing Operations')
+            operating_cashflow = self._from_balance_sheet('Cash Flow From Continuing Operating Activities')
             return (net_income / operating_cashflow).rename('영업 활동으로 발생하는 현금 흐름 (Income/Operating)') * 100
         except Exception as e:
             return None
-
+        
     @index_to_datetime
-    def ratio_income_div_assetes(self, period='quarterly') -> pd.Series or None:
+    def ratio_income_div_assetes(self) -> pd.Series | None:
         try:
-            net_income = self._net_income_from_cashflow('Net Income From Continuing Operations', period)
-            total_assets = self._total_assets_from_balance_sheet('Total Assets', period)
-
+            net_income = self._from_balance_sheet('Net Income From Continuing Operations')
+            total_assets = self._from_balance_sheet('Total Assets')
             return (net_income / total_assets).rename('자산 대비 수익 창출 능력 (Income/Assets)') * 100
         except Exception as e:
             return None
 
     @retry
-    def _net_income_from_cashflow(self, key='Net Income From Continuing Operations',
-                                  period: str = 'quarterly'):  # ->pd.DataFrame | None:
+    def _from_balance_sheet(self, key='Total Assets') ->pd.DataFrame | None:    
+        """
+        Args:
+            key (str, optional): _description_. Defaults to 
+            
+            'Total Assets'.
+            'Net Income From Continuing Operations'
+            'Cash Flow From Continuing Operating Activities'
 
-        if period == 'quarterly':
-            return self._stock_data.quarterly_cashflow.loc[key, :]
-        elif 'yearly':
-            return self._stock_data.cashflow.loc[key, :]
+        Returns:
+            pd.DataFrame | None: _description_
+        """
+        if 'assets' in key.lower():
+            y =  self._stock_data.balance_sheet.loc[key, :]
+            q= self._stock_data.quarterly_balance_sheet.loc[key, :]
+        else:
+            y =  self._stock_data.cashflow.loc[key, :]
+            q= self._stock_data.quarterly_cashflow.loc[key, :]
+            
+        y = y.sort_index()
+        q = q.sort_index()
 
-    @retry
-    def _total_assets_from_balance_sheet(self, key='Total Assets', period: str = 'quarterly'):  # ->pd.DataFrame | None:
-
-        if period == 'quarterly':
-            return self._stock_data.quarterly_balance_sheet.loc[key, :]
-        elif 'yearly':
-            return self._stock_data.balance_sheet.loc[key, :]
+        last_year = y.index[-1]
+        last_q = q.index[-1]
+        
+        if last_year != last_year:
+            y= y.shift(-1)
+            y.loc[last_q] = q[q.index > str(last_year)].cumsum()[last_q]
+            y = y.bfill()
+        else:
+            y = y.dropna()
+            
+        return y

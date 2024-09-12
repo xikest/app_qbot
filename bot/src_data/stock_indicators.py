@@ -22,7 +22,7 @@ class StockIndicators(Indicators):
         #if getattr(self,'to_pctchange_cum', False):
         to_pctchange_cum = kwargs.get('to_pctchange_cum')   
         if to_pctchange_cum:           
-            ds=ds.pct_change().cumsum()               
+            ds=ds.pct_change().cumsum()*100              
         return ds
 
 

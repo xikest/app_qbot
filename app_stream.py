@@ -1,5 +1,5 @@
 import streamlit as st
-import plotly.graph_objects as go
+from datetime import datetime
 from bot.src_data.economic_indicators import EconomicIndicators
 from bot.src_data.stock_indicators import StockIndicators
 from bot.src_data.commodity_indicators import CommodityIndicators
@@ -7,15 +7,14 @@ from bot.src_data.fx_indicators import FxIndicators
 from bot.src_data.multpl import MultplIndicators
 
 @st.cache_data
-def loading_cash(_indicator_class, selected_indicators, start=None, periods=None,to_pctchange_cum =False):
+def loading_cash(_indicator_class, selected_indicators, start=None, end=None, periods=None, to_pctchange_cum=False):
     fig_list = []
     for indicator in selected_indicators:
-        fig_list.extend(_indicator_class.requests(indicator, start=start, periods=periods, to_pctchange_cum = to_pctchange_cum ))
+        fig_list.extend(_indicator_class.requests(indicator, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum))
     return fig_list
 
 def display_indicators():
     st.set_page_config(layout="wide")
-    
     
     # Sidebar for choosing indicator type
     indicator_type = st.sidebar.selectbox(
@@ -39,15 +38,27 @@ def display_indicators():
     # Sidebar for selecting specific indicators using checkboxes
     selected_indicators = st.sidebar.multiselect("Select Indicators", indicator_keys)
     
+    # Add a slider to select start and end year
+    start_year, end_year = st.sidebar.slider(
+        "Select Year Range",
+        min_value=2000,
+        max_value=2024,
+        value=(2020, 2024),  # Default range
+        step=1
+    )
+    
+    # Convert selected years to strings in 'YYYY-MM-DD' format
+    start = f"{start_year}-01-01"
+    end = datetime.today().strftime('%Y-%m-%d')
+    
     st.title(f"{indicator_type} ▶ {', '.join(selected_indicators)}")
     
     if selected_indicators:
         try:
-            start = '2000-01-01' if indicator_type == "Economic Indicators" else None
-            if indicator_type != "Economic Indicators":
-                periods = 10 
-                to_pctchange_cum = True 
-            fig_list = loading_cash(indicator_class, selected_indicators, start=start, periods=periods, to_pctchange_cum=  to_pctchange_cum) 
+            periods = 10 if indicator_type != "Economic Indicators" else None
+            to_pctchange_cum = True if indicator_type != "Economic Indicators" else False
+            fig_list = loading_cash(indicator_class, selected_indicators, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum) 
+            
             # Calculate number of columns needed
             num_columns = 4
             num_figs = len(fig_list)
