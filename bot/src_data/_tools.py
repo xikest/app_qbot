@@ -433,6 +433,9 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         shares = _request_shares(key, 'shares')
         splits = _request_shares(key, 'splits')
 
+        if shares is None:
+            return fig
+        
         adjusted_shares = shares.copy()
         adjusted_shares = adjusted_shares.astype(float)
         
