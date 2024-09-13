@@ -99,21 +99,17 @@ class Plot:
             ds = func(*args, **kwargs)
             name = ds.name
             to_pctchange_cum = kwargs.get('to_pctchange_cum')
-
             try:
                 title = name.split(":")[0].strip()
                 suffix = name.split(":")[1].strip()
             except:
                 suffix = None
-
+            
             fig = go.Figure()
-
             if title == 'Beveridge Curve':
                 fig = _add_scatter(fig=fig, ds=ds)
                 title = f'{title} with {suffix}'
-
             else:
-
                 if self.plot_type == "line":
                     fig.add_trace(go.Scatter(
                         x=ds.index,
@@ -126,9 +122,6 @@ class Plot:
                     fig = _add_annotation(fig, ds, pos='recent', suffix=suffix)
                     fig = _add_annotation(fig, ds, pos='max', suffix=suffix)
                     fig = _add_annotation(fig, ds, pos='min', suffix=suffix)
-                    
-
-
                 elif self.plot_type == "bb_band":
 
                     upper_band, middle_band, lower_band = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
@@ -155,7 +148,6 @@ class Plot:
                         line=dict(color='gray', width=0.5),
                         name='Lower Band'
                     ))
- 
                 elif self.plot_type == "ma":
                     _, middle_band, _ = bollinger_bands(ds, timeperiod=20, nbdevup=2, nbdevdn=2)
                     fig.add_trace(go.Scatter(
@@ -172,20 +164,10 @@ class Plot:
                             min_label = scope.split(",")[0].strip()
                             max_label = scope.split(",")[1].strip()
                             fig = _add_horiz_min_max(fig, ds, min_label=min_label, max_label=max_label)
-
+                
                 if self.add_recession:
                     fig = _add_recession_periods(fig, ds)
-
-
-                fig.update_layout(      #title
-                    title={
-                        'text': title,
-                        'x': 0.5,  # X 위치를 0.5로 설정하여 중앙 정렬
-                        'xanchor': 'center',  # X 축을 중앙에 앵커링
-                        'yanchor': 'top'  # Y 축을 상단에 앵커링
-                    }
-                )
-
+                
                 if self.secondary_plot == "stock_sheet":
                     fig = _add_stock_sheet(fig, ds)
                 elif self.secondary_plot == "pct_change":
@@ -194,6 +176,14 @@ class Plot:
             if to_pctchange_cum:
                 fig.update_layout(yaxis_title="Cumulative Return (%)")
                 
+            fig.update_layout(      #title
+                title={
+                    'text': title,
+                    'x': 0.5,  # X 위치를 0.5로 설정하여 중앙 정렬
+                    'xanchor': 'center',  # X 축을 중앙에 앵커링
+                    'yanchor': 'top'  # Y 축을 상단에 앵커링
+                }
+            )
             if self.mode_binary:
                 buf = BytesIO()
                 fig.write_image(buf, format='png', width=1000, height=1000)
