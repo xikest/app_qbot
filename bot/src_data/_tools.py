@@ -419,12 +419,19 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
     
     def _add_shares(fig, ds: pd.Series):
         key = ds.name
-        stock = yf.Ticker(key)
         
-        shares = stock.get_shares_full(start="2000-01-01")
-        splits = stock.splits
-        shares = adjust_idx(shares)
-        splits = adjust_idx(splits)
+        @index_to_datetime
+        def _request_shares(key: str = 'shares'):
+            stock = yf.Ticker(key)
+            if key == 'shares':
+                shares = stock.get_shares_full(start="2000-01-01")
+                return shares
+            elif key == 'splits':
+                splits = stock.splits
+                return splits
+                
+        shares = _request_shares('shares')
+        splits = _request_shares('splits')
 
         adjusted_shares = shares.copy()
         adjusted_shares = adjusted_shares.astype(float)
