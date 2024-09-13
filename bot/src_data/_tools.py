@@ -416,8 +416,38 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
 
           
     cf = CashFlow(symbol=key)
+    
+    def _add_shares(fig, ds: pd.Series):
+        key = ds.name
+        stock = yf.Ticker(key)
+        
+        shares = stock.get_shares_full(start="2000-01-01")
+        splits = stock.splits
+        shares = adjust_idx(shares)
+        splits = adjust_idx(splits)
 
-    def _add_dividens(fig, ds: pd.Series):
+        adjusted_shares = shares.copy()
+        adjusted_shares = adjusted_shares.astype(float)
+        
+        for (date, split) in splits.items():
+            adjusted_shares[adjusted_shares.index >date] = adjusted_shares[adjusted_shares.index >date] / split
+            
+        threshold = adjusted_shares.quantile(0.99)
+        adjusted_shares =adjusted_shares.apply(lambda x: np.nan if x > threshold else x)
+        adjusted_shares = adjusted_shares.ffill()
+        
+        adjusted_shares = adjusted_shares.rolling(90).mean().pct_change().add(1).cumprod().sub(1)
+        
+        fig.add_trace(go.Scatter(
+            x=adjusted_shares.index,
+            y=adjusted_shares,
+            mode='lines',
+            line=dict(color='blue', width=2, dash='solid'),
+            name='shares'
+        ))  
+        return fig
+        
+    def _add_dividends(fig, ds: pd.Series):
         
         @index_to_datetime
         def _request_dividends(key: str = 'AAPL', select_col = 'Dividends' ,start: str = None, end: str = None) -> pd.Series:
@@ -601,7 +631,8 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         )
     
     fig = _add_stock_info(fig, cf.get_info())
-    fig = _add_dividens(fig, ds=ds)
+    fig = _add_dividends(fig, ds=ds)
+    fig = _add_shares(fig, ds=ds)
     # st.plotly_chart(fig, use_container_width=True)  
     return fig
 
