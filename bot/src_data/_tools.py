@@ -7,10 +7,9 @@ from pandas import Series
 from io import BytesIO
 import numpy as np
 import yfinance as yf
-from fredapi import Fred
+import FinanceDataReader as fdr
 from datetime import timedelta
 import plotly.graph_objects as go
-import streamlit as st
 
 def validate_date(func):
     @wraps(func)
@@ -341,11 +340,13 @@ def _add_scatter(fig: go.Figure, ds: pd.Series, y: dict = {'UNRATE':'Unemploymen
     col_name = ds.name.split(':')[-1]
     y_name = list(y.values())[0]
     x_name = list(x.values())[0]
-    api_key = "1afc3162f75a055edf1d1a95529096cf"
+
+   
     
     # FRED에서 실업률, 구인율 데이터 가져오기
-    unemployment_rate = Fred(api_key=api_key).get_series(list(y.keys())[0], observation_start=start, observation_end=end)
-    job_opening_rate = Fred(api_key=api_key).get_series(list(x.keys())[0], observation_start=start, observation_end=end)
+    unemployment_rate = fdr.DataReader(f'FRED:{list(y.keys())[0]}', start=start, end=end).iloc[:,0]
+    job_opening_rate = fdr.DataReader(f'FRED:{list(x.keys())[0]}', start=start, end=end).iloc[:,0]
+
     ref_treasury = ds
 
     # 데이터 통합

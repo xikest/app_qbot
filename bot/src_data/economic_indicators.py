@@ -2,11 +2,10 @@ from pandas import Series
 import FinanceDataReader as fdr
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
-import streamlit as st
 
 class EconomicIndicators(Indicators):
 
-    def __init__(self, api_key: str = None):
+    def __init__(self):
         super().__init__(indicators_file="economic.json")
 
     @Plot(mode_binary=False, plot_type='line')
