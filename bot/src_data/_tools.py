@@ -443,7 +443,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         adjusted_shares =adjusted_shares.apply(lambda x: np.nan if x > threshold else x)
         adjusted_shares = adjusted_shares.ffill()
         
-        adjusted_shares = adjusted_shares.rolling(90).mean().pct_change().add(1).cumprod().sub(1)
+        adjusted_shares = adjusted_shares.rolling(90).mean().pct_change().add(1).cumprod().sub(1).mul(100)
         
         fig.add_trace(go.Scatter(
             x=adjusted_shares.index,
