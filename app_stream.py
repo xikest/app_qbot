@@ -7,11 +7,19 @@ from bot.src_data.fx_indicators import FxIndicators
 from bot.src_data.multpl import MultplIndicators
 
 @st.cache_data
-def loading_cash(_indicator_class, selected_indicators, start=None, end=None, periods=None, to_pctchange_cum=False):
+def loading_data(_indicator_class, selected_indicators, start=None, end=None, periods=None, to_pctchange_cum=False):
     fig_list = []
     for indicator in selected_indicators:
         fig_list.extend(_indicator_class.requests(indicator, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum))
     return fig_list
+
+
+def add_ticker():
+    # This function will be called when the user presses Enter in the text_input field
+    new_ticker = st.session_state.new_ticker
+    if new_ticker and new_ticker not in st.session_state.selected_tickers:
+        st.session_state.selected_tickers.add(new_ticker)  # 티커를 세트로 추가
+        st.session_state.new_ticker = ""  # 입력 필드를 초기화
 
 def display_indicators():
     st.set_page_config(layout="wide")
@@ -31,33 +39,103 @@ def display_indicators():
         "FX Indicators": FxIndicators,
         "Multpl Indicators": MultplIndicators
     }.get(indicator_type)()
-    
-    # Get the keys for the selected indicator type
-    indicator_keys = list(indicator_class.dict_indicators.keys())
-    
-    # Sidebar for selecting specific indicators using checkboxes
-    selected_indicators = st.sidebar.multiselect("Select Indicators", indicator_keys)
-    
-    # Add a slider to select start and end year
-    start_year, end_year = st.sidebar.slider(
-        "Select Year Range",
-        min_value=2000,
-        max_value=2024,
-        value=(2020, 2024),  # Default range
-        step=1
-    )
-    
-    # Convert selected years to strings in 'YYYY-MM-DD' format
-    start = f"{start_year}-01-01"
-    end = datetime.today().strftime('%Y-%m-%d')
-    
-    st.title(f"{indicator_type} ▶ {', '.join(selected_indicators)}")
-    
+
+    # Default empty values
+    selected_indicators = []
+    start = end = None
+
+    if indicator_type == "Stock Indicators":
+        # Use a radio button to switch between Select Indicators and Search ticker in the sidebar
+        selected_view = st.sidebar.radio("Options", ["Select Indicators", "Search ticker"])
+
+        # Add a slider to select start and end year
+        start_year, end_year = st.sidebar.slider(
+            "Select Year Range",
+            min_value=2000,
+            max_value=2024,
+            value=(2020, 2024),  # Default range
+            step=1
+        )
+        
+        # Convert selected years to strings in 'YYYY-MM-DD' format
+        start = f"{start_year}-01-01"
+        end = datetime.today().strftime('%Y-%m-%d')
+
+        if selected_view == "Select Indicators":
+            # Get the keys for the selected indicator type
+            indicator_keys = list(indicator_class.dict_indicators.keys())
+            
+            # Sidebar for selecting specific indicators using checkboxes
+            selected_indicators = st.sidebar.multiselect("Select Indicators", indicator_keys)
+            
+            
+        elif selected_view == "Search ticker":
+            st.sidebar.write("Search for a specific ticker.")
+            
+            # List to store selected tickers as a set
+            if 'selected_tickers' not in st.session_state:
+                st.session_state['selected_tickers'] = set()  # 세트로 변경
+
+            st.sidebar.text_input(
+                "Enter ticker symbol and press Enter",
+                key="new_ticker",
+                on_change=add_ticker
+            )
+            # Display selected tickers with the option to remove
+            st.sidebar.write("Selected Tickers:")
+            tickers_to_remove = set()
+            for ticker in st.session_state.selected_tickers:
+                col1, col2 = st.sidebar.columns([0.8, 0.2])
+                with col1:
+                    st.write(ticker)
+                with col2:
+                    if st.button("X", key=f"remove_{ticker}"):
+                        tickers_to_remove.add(ticker)
+
+            # Remove selected tickers
+            if tickers_to_remove:
+                st.session_state.selected_tickers -= tickers_to_remove
+            
+
+            
+            # Use selected tickers as indicators
+            selected_tickers = list(st.session_state.selected_tickers)
+            
+            # st.write("Selected indicators: ", selected_indicators)
+            selected_indicators.append({ticker: ticker for _, ticker in enumerate(selected_tickers)})
+
+    else:
+        # For other indicator types, show standard layout without the radio button
+        indicator_keys = list(indicator_class.dict_indicators.keys())
+        
+        # Sidebar for selecting specific indicators using checkboxes
+        selected_indicators = st.sidebar.multiselect("Select Indicators", indicator_keys)
+        
+        # Add a slider to select start and end year
+        start_year, end_year = st.sidebar.slider(
+            "Select Year Range",
+            min_value=2000,
+            max_value=2024,
+            value=(2020, 2024),  # Default range
+            step=1
+        )
+        
+        # Convert selected years to strings in 'YYYY-MM-DD' format
+        start = f"{start_year}-01-01"
+        end = datetime.today().strftime('%Y-%m-%d')
+
+    # Display the title only if selected_indicators is not empty
+    if selected_indicators:
+        # st.title(f"{indicator_type} ▶ {', '.join(selected_indicators)}")
+        st.title(f"{indicator_type}")  
+    else:
+        st.title(f"{indicator_type}")
+
     if selected_indicators:
         try:
             periods = 10 if indicator_type != "Economic Indicators" else None
             to_pctchange_cum = True if indicator_type != "Economic Indicators" else False
-            fig_list = loading_cash(indicator_class, selected_indicators, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum) 
+            fig_list = loading_data(indicator_class, selected_indicators, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum) 
             
             # Calculate number of columns needed
             num_columns = 4

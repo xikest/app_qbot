@@ -10,6 +10,7 @@ import yfinance as yf
 import FinanceDataReader as fdr
 from datetime import timedelta
 import plotly.graph_objects as go
+import streamlit as st
 
 def validate_date(func):
     @wraps(func)
@@ -106,9 +107,14 @@ class Plot:
                 suffix = None
             
             fig = go.Figure()
+            
+            
+            
             if title == 'Beveridge Curve':
                 fig = _add_scatter(fig=fig, ds=ds)
                 title = f'{title} with {suffix}'
+                
+                
             else:
                 if self.plot_type == "line":
                     fig.add_trace(go.Scatter(
@@ -169,9 +175,10 @@ class Plot:
                     fig = _add_recession_periods(fig, ds)
                 
                 if self.secondary_plot == "stock_sheet":
-                    fig = _add_stock_sheet(fig, ds)
+                    fig, title = _add_stock_sheet(fig, ds)
                 elif self.secondary_plot == "pct_change":
                     fig = _add_pct_change(fig, ds)
+
 
             if to_pctchange_cum:
                 fig.update_layout(yaxis_title="Cumulative Return (%)")
@@ -437,15 +444,16 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         adjusted_shares =adjusted_shares.apply(lambda x: np.nan if x > threshold else x)
         adjusted_shares = adjusted_shares.ffill()
         
-        adjusted_shares = adjusted_shares.rolling(90).mean().round(1)
+        adjusted_shares = adjusted_shares.pct_change().add(1).cumprod().sub(1).mul(100).rolling(90).mean().round(1)
         
         fig.add_trace(go.Scatter(
             x=adjusted_shares.index,
             y=adjusted_shares,
             mode='lines',
             line=dict(color='blue', width=2, dash='solid'),
-            name='shares'
-        ))  
+            name='shares',
+            hovertemplate='%{x}<br>%{y:.2f}%'  # y 값을 %로 표시하고 x 값도 함께 표시
+        ))
         return fig
         
     def _add_dividends(fig, ds: pd.Series):
@@ -555,7 +563,7 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         
         return fig
 
-    def _add_stock_info(fig: go.Figure, dict_info: dict) -> go.Figure:
+    def _add_stock_info(dict_info: dict) -> str:
         long_name = dict_info.get("long name")
         title = f"{long_name}\n" if long_name else dict_info.get("symbol")
         enterprise_value = int(dict_info.get('enterprise value', 0))
@@ -583,16 +591,8 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
                 f"<b style='font-size: 15px;'>{title}</b><br>"
             )
             
-
-        fig.update_layout(
-            title={
-                'text': info_text,
-                'x': 0.5,  # X 위치를 0.5로 설정하여 중앙 정렬
-                'xanchor': 'center',  # X 축을 중앙에 앵커링
-                'yanchor': 'top'  # Y 축을 상단에 앵커링
-            }
-        )
-        return fig
+            
+        return info_text
 
     dict_cashflow = {"Cash Flow from Operations(%)": cf.ratio_income_div_operating(),
                        "Cash Flow from Assets(%)": cf.ratio_income_div_assetes()}
@@ -631,11 +631,10 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
             )
         )
     
-    fig = _add_stock_info(fig, cf.get_info())
     fig = _add_dividends(fig, ds=ds)
     fig = _add_shares(fig, ds=ds)
-    # st.plotly_chart(fig, use_container_width=True)  
-    return fig
+    title = _add_stock_info(cf.get_info())
+    return fig, title
 
 def _add_annotation(fig: go.Figure, ds: pd.Series, pos: str = "recent", yaxis='y',suffix: str = None, fontsize: int = 13, color='black',
                     textposition='top center', visible_index: bool = True) -> go.Figure:

@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import os
 
-
 class Indicators(ABC):
     def __init__(self, indicators_file: str):
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,9 +16,14 @@ class Indicators(ABC):
     def _request(self, key: str, periods: int = None, *args,  **kwargs):
         pass
 
-    def requests(self, key_indicator: str = 'inflation', start: str = None, end: str = None,
+    def requests(self, key_indicator: any = 'inflation', start: str = None, end: str = None,
                  periods: int = None, to_pctchange_cum : bool=False) -> Generator:
-        dict_group = self.dict_indicators.get(key_indicator, {})
+        
+        if isinstance(key_indicator, dict):
+            dict_group = key_indicator
+        elif isinstance(key_indicator, str):
+            dict_group = self.dict_indicators.get(key_indicator, {})
+            
         yield from [self._request(key=key, name=name, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum)[0] for key, name in
                     dict_group.items()]
 
