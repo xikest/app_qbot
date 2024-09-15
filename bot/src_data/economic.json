@@ -4,8 +4,7 @@
 
     "indicators": {
         "cycle": {      
-            "DGS10": "Beveridge Curve: 10 year yield",
-            "FEDFUNDS": "Beveridge Curve: Effective Rate"
+            "UNRATE": "Beveridge Curve: Unemployment Rate"
         },
 
         "inflation": {

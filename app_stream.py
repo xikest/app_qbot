@@ -118,17 +118,18 @@ def display_indicators():
         
         start, end = select_date_sidebar()
 
-    # Display the title only if selected_indicators is not empty
-    if selected_indicators:
-        # st.title(f"{indicator_type} ▶ {', '.join(selected_indicators)}")
-        st.title(f"{indicator_type}")  
-    else:
-        st.title(f"{indicator_type}")
 
     if selected_indicators:
         try:
             periods = 10 if indicator_type != "Economic Indicators" else None
-            to_pctchange_cum = True if indicator_type != "Economic Indicators" else False
+            
+            if indicator_type != "Economic Indicators":
+                to_pctchange_cum = True 
+            else:
+                to_pctchange_cum = False 
+            if indicator_type == "Stock Indicators":
+                st.title(f"{indicator_type} (CPI adjusted)")
+
             fig_list = loading_data(indicator_class, selected_indicators, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum) 
             
             # Calculate number of columns needed

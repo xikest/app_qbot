@@ -15,4 +15,8 @@ class EconomicIndicators(Indicators):
                  start: str = None, end: str = None, *args, **kwargs) -> Series:
         ds = fdr.DataReader(f'FRED:{key}', start=start, end=end).iloc[:,0]
         ds.name = name
+        
+        # to_pctchange_cum = kwargs.get('to_pctchange_cum')   
+        # if to_pctchange_cum:           
+        #     ds=ds.pct_change(12).mul(100)              
         return ds

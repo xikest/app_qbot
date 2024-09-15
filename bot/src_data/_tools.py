@@ -10,6 +10,7 @@ import yfinance as yf
 import FinanceDataReader as fdr
 from datetime import timedelta
 import plotly.graph_objects as go
+import streamlit as st
 
 def validate_date(func):
     @wraps(func)
@@ -110,10 +111,17 @@ class Plot:
             
             
             if title == 'Beveridge Curve':
-                fig = _add_scatter(fig=fig, ds=ds)
-                title = f'{title} with {suffix}'
+                fig = _add_scatter(fig=fig, ds=ds, y={'JTSJOR':'Job Openings Rate'}, marker={'DGS10':'10 year yield'})
+                            # "FEDFUNDS": "Beveridge Curve: Effective Rate"
+                title = f'{title}'
+            
+            elif "cpi" in title.lower():
+                fig = _add_scatter(fig=fig, ds=ds, y={'CPIAUCSL':'CPI'}, marker={"DGS10": "10 year yield"})
+                title = f'{title}'
                 
-                
+            elif "personal" in title.lower():
+                fig = _add_scatter(fig=fig, ds=ds, y={'PCE':'PCE'}, marker={"DGS10": "10 year yield"})
+                title = f'{title}'
             else:
                 if self.plot_type == "line":
                     fig.add_trace(go.Scatter(
@@ -178,10 +186,6 @@ class Plot:
                 elif self.secondary_plot == "pct_change":
                     fig = _add_pct_change(fig, ds)
 
-
-            if to_pctchange_cum:
-                fig.update_layout(yaxis_title="Cumulative Return (%)")
-                
             fig.update_layout(      #title
                 title={
                     'text': title,
@@ -190,6 +194,9 @@ class Plot:
                     'yanchor': 'top'  # Y 축을 상단에 앵커링
                 }
             )
+            if to_pctchange_cum:
+                fig.update_layout(yaxis_title="Cumulative Return (%)")
+                
             if self.mode_binary:
                 buf = BytesIO()
                 fig.write_image(buf, format='png', width=1000, height=1000)
@@ -329,25 +336,25 @@ def _add_pct_change(fig: go.Figure, ds: pd.Series) -> go.Figure:
     return fig
 
 
-def _add_scatter(fig: go.Figure, ds: pd.Series, y: dict = {'UNRATE':'Unemployment Rate'}, x: dict = {'JTSJOR':'Job Openings Rate'}) -> go.Figure:
+def _add_scatter(fig: go.Figure, ds: pd.Series,  y: dict = {'JTSJOR':'Job Openings Rate'}, marker: dict = {'UNRATE':'Unemployment Rate'}) -> go.Figure:
 
     start = ds.index[0]
     end = ds.index[-1]
-    col_name = ds.name.split(':')[-1]
-    y_name = list(y.values())[0]
-    x_name = list(x.values())[0]
-
-   
     
-    # FRED에서 실업률, 구인율 데이터 가져오기
-    unemployment_rate = fdr.DataReader(f'FRED:{list(y.keys())[0]}', start=start, end=end).iloc[:,0]
-    job_opening_rate = fdr.DataReader(f'FRED:{list(x.keys())[0]}', start=start, end=end).iloc[:,0]
+    ##
+    maker_name = list(marker.values())[0]
+    y_name = list(y.values())[0]
+    x_name = ds.name.split(':')[-1]
+    
+    
+    maker_data=  fdr.DataReader(f'FRED:{list(marker.keys())[0]}', start=start, end=end).iloc[:,0]
+    y_data = fdr.DataReader(f'FRED:{list(y.keys())[0]}', start=start, end=end).iloc[:,0]
+    x_data = ds
 
-    ref_treasury = ds
-
+    
     # 데이터 통합
-    data = pd.concat([unemployment_rate, job_opening_rate, ref_treasury], axis=1)
-    data.columns = [y_name, x_name, col_name]
+    data = pd.concat([y_data, x_data, maker_data], axis=1)
+    data.columns = [y_name, x_name, maker_name]
 
     # 결측값 처리
     data = data.ffill().resample('ME').last().dropna()
@@ -357,20 +364,28 @@ def _add_scatter(fig: go.Figure, ds: pd.Series, y: dict = {'UNRATE':'Unemploymen
     recent_data = data.loc[two_years_ago:].copy()
 
     # 3개월 이동평균 계산
-    recent_data[f'{y_name} MA'] = recent_data[y_name].rolling(window=6).mean()
     recent_data[f'{x_name} MA'] = recent_data[x_name].rolling(window=6).mean()
+    recent_data[f'{y_name} MA'] = recent_data[y_name].rolling(window=6).mean()
 
+
+    data_min = data[maker_name].min()
+    data_max = data[maker_name].max()
+
+    size = (data[maker_name] - data_min) / (data_max - data_min)
+
+    
     # 최근 데이터 선택 (마지막 데이터 포인트)
     latest_data = data.tail(1)
+    latest_size = size.tail(1)
 
     # 산점도 추가
     fig.add_trace(go.Scatter(
-        x=data[y_name],
-        y=data[x_name],
+        x=data[x_name],
+        y=data[y_name],
         mode='markers',
         marker=dict(
-            size=data[col_name] * 5,  # 점의 크기를 10년 금리로 설정
-            color=data[col_name],  # 색상으로 10년 금리 사용
+            size=size * 20,  # 점의 크기를 10년 금리로 설정
+            color=size,  # 색상으로 10년 금리 사용
             colorscale='Cividis',  # Cividis 컬러맵 적용
             showscale=True,
             opacity=0.8
@@ -380,34 +395,45 @@ def _add_scatter(fig: go.Figure, ds: pd.Series, y: dict = {'UNRATE':'Unemploymen
 
     # 최근 5년 데이터에 3개월 이동평균 추세선 추가
     fig.add_trace(go.Scatter(
-        x=recent_data[f'{y_name} MA'],
-        y=recent_data[f'{x_name} MA'],
+        x=recent_data[f'{x_name} MA'],
+        y=recent_data[f'{y_name} MA'],
         mode='lines',
         line=dict(color='red', width=1),
         name='3-Month Moving Average'
     ))
 
+    if 'rate' in maker_name.lower():
+        hover_text = f'{maker_name}: {latest_data[maker_name].values[0]:.2f}%'
+    else:
+        hover_text = f'{maker_name}: {latest_data[maker_name].values[0]:.2f}'
+
     # 최근 데이터 레이블 추가
     fig.add_trace(go.Scatter(
-        x=latest_data[y_name],
-        y=latest_data[x_name],
+        x=latest_data[x_name],
+        y=latest_data[y_name],
         mode='markers+text',
-        text=[f'{col_name}: {latest_data[col_name].values[0]:.2f}%'],
+        text=[hover_text],
         textposition='top center',
-        marker=dict(size=latest_data[col_name].values[0] * 2, color='red', line=dict(color='red', width=2)),
-        name=f'Latest {col_name}'
+        marker=dict(size=latest_size * 2, color='red', line=dict(color='red', width=2)),
+        name=f'Latest {maker_name}'
     ))
 
     # 그래프 레이아웃 설정
+    if 'rate' in y_name.lower():
+        y_name = f'{y_name} (%)'
+    if 'rate' in x_name.lower():
+        x_name = f'{x_name} (%)'
+        
     fig.update_layout(
-        xaxis_title="Unemployment Rate (%)",
-        yaxis_title="Job Openings Rate (%)",
+        xaxis_title=x_name,
+        yaxis_title=y_name,
         legend=dict(font=dict(size=8), title_font=dict(size=10)),
         margin=dict(l=40, r=40, t=40, b=40),
         plot_bgcolor='white'
     )
-
     return fig
+
+
 def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
     key = str(ds.name)
 
