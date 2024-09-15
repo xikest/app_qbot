@@ -10,9 +10,6 @@ import yfinance as yf
 import FinanceDataReader as fdr
 from datetime import timedelta
 import plotly.graph_objects as go
-import streamlit as st
-from sqlalchemy import create_engine
-
 
 def validate_date(func):
     @wraps(func)
@@ -64,7 +61,6 @@ def index_to_datetime(func):
             return data
 
     return wrapper
-
 
 
 def retry(func=None, *, try_cnt=2):
