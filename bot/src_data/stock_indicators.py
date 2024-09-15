@@ -3,8 +3,6 @@ import pandas as pd
 import FinanceDataReader as fdr
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
-from ._db import get_close_prices_from_db, get_dividends_from_db
-import streamlit as st
 
 class StockIndicators(Indicators):
     def __init__(self):
@@ -14,8 +12,7 @@ class StockIndicators(Indicators):
     @validate_date
     def _request(self, key: str = 'AAPL', name: str = None,
                  start: str = None, end: str = None, *args, **kwargs) -> pd.Series:
-        # ds = yf.Ticker(ticker=key).history(start=start, end=end).Close.round(1)
-        ds = get_close_prices_from_db(ticker=key, start=start, end=end).round(1)
+        ds = yf.Ticker(ticker=key).history(start=start, end=end).Close.round(1)
         cpi = fdr.DataReader(f'FRED:CPIAUCSL', start=start, end=end).iloc[:,0]
         ds.index = pd.to_datetime(ds.index.strftime('%Y-%m-%d'))
 
@@ -26,9 +23,5 @@ class StockIndicators(Indicators):
         
         to_pctchange_cum = kwargs.get('to_pctchange_cum')   
         if to_pctchange_cum:           
-            ds=ds.pct_change().add(1).cumprod().sub(1).mul(100)         
-              
+            ds=ds.pct_change().add(1).cumprod().sub(1).mul(100)              
         return ds
-
-
-
