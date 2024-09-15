@@ -13,14 +13,31 @@ def loading_data(_indicator_class, selected_indicators, start=None, end=None, pe
         fig_list.extend(_indicator_class.requests(indicator, start=start, end=end, periods=periods, to_pctchange_cum=to_pctchange_cum))
     return fig_list
 
-
 def add_ticker():
     # This function will be called when the user presses Enter in the text_input field
     new_ticker = st.session_state.new_ticker
     if new_ticker and new_ticker not in st.session_state.selected_tickers:
         st.session_state.selected_tickers.add(new_ticker)  # 티커를 세트로 추가
         st.session_state.new_ticker = ""  # 입력 필드를 초기화
-
+        
+def select_date_sidebar():
+    start_year, end_year = st.sidebar.slider(
+        "Select Year Range",
+        min_value=2000,
+        max_value=2024,
+        value=(2020, 2024),  # Default range
+        step=1
+    )
+    
+    # Convert selected years to strings in 'YYYY-MM-DD' format
+    start = f"{start_year}-01-01"
+    current_year = datetime.today().strftime('%Y')
+    if end_year == current_year:
+        end = datetime.today().strftime('%Y-%m-%d')
+    else:
+        end = f"{end_year}-12-31"
+    return start, end
+        
 def display_indicators():
     st.set_page_config(layout="wide")
     
@@ -47,20 +64,10 @@ def display_indicators():
     if indicator_type == "Stock Indicators":
         # Use a radio button to switch between Select Indicators and Search ticker in the sidebar
         selected_view = st.sidebar.radio("Options", ["Select Indicators", "Search ticker"])
-
-        # Add a slider to select start and end year
-        start_year, end_year = st.sidebar.slider(
-            "Select Year Range",
-            min_value=2000,
-            max_value=2024,
-            value=(2020, 2024),  # Default range
-            step=1
-        )
         
-        # Convert selected years to strings in 'YYYY-MM-DD' format
-        start = f"{start_year}-01-01"
-        end = datetime.today().strftime('%Y-%m-%d')
-
+        start, end = select_date_sidebar()
+        
+        
         if selected_view == "Select Indicators":
             # Get the keys for the selected indicator type
             indicator_keys = list(indicator_class.dict_indicators.keys())
@@ -95,9 +102,7 @@ def display_indicators():
             # Remove selected tickers
             if tickers_to_remove:
                 st.session_state.selected_tickers -= tickers_to_remove
-            
 
-            
             # Use selected tickers as indicators
             selected_tickers = list(st.session_state.selected_tickers)
             
@@ -111,18 +116,7 @@ def display_indicators():
         # Sidebar for selecting specific indicators using checkboxes
         selected_indicators = st.sidebar.multiselect("Select Indicators", indicator_keys)
         
-        # Add a slider to select start and end year
-        start_year, end_year = st.sidebar.slider(
-            "Select Year Range",
-            min_value=2000,
-            max_value=2024,
-            value=(2020, 2024),  # Default range
-            step=1
-        )
-        
-        # Convert selected years to strings in 'YYYY-MM-DD' format
-        start = f"{start_year}-01-01"
-        end = datetime.today().strftime('%Y-%m-%d')
+        start, end = select_date_sidebar()
 
     # Display the title only if selected_indicators is not empty
     if selected_indicators:
