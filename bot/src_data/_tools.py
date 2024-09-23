@@ -494,6 +494,9 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         idx = ds.index
         start = idx[0]
         end = idx[-1]  
+
+        st.write(start)
+        st.write(end)
         
         dividends = _request_dividends(key=ds.name, select_col='Dividends',start=start, end=end)
         dividends = dividends[dividends>0]
