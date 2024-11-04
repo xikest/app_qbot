@@ -85,6 +85,7 @@ def retry(func=None, *, try_cnt=2):
         return decorator(func)
 
 
+
 class Plot:
     def __init__(self, mode_binary: bool = False, plot_type: str = "bb_band", add_recession: bool = True,
                  draw_horiz: dict = None, secondary_plot: str = ""):
@@ -97,6 +98,10 @@ class Plot:
     def __call__(self, func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> List[Union[bytes, go.Figure]]:
+            start = kwargs.get("start")
+            end = kwargs.get("end")
+            # st.write(start)
+            # st.write(end)
             ds = func(*args, **kwargs)
             name = ds.name
             to_pctchange_cum = kwargs.get('to_pctchange_cum')
@@ -192,7 +197,9 @@ class Plot:
                     'x': 0.5,  # X 위치를 0.5로 설정하여 중앙 정렬
                     'xanchor': 'center',  # X 축을 중앙에 앵커링
                     'yanchor': 'top'  # Y 축을 상단에 앵커링
-                }
+                },
+                xaxis=dict(
+                    range=[start, end])
             )
             if to_pctchange_cum:
                 fig.update_layout(yaxis_title="Cumulative Return (%)")
@@ -470,7 +477,8 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         adjusted_shares = adjusted_shares.ffill()
         
         adjusted_shares = adjusted_shares.pct_change().add(1).cumprod().sub(1).mul(100).rolling(90).mean().round(1)
-        
+        adjusted_shares = adjusted_shares.dropna()
+
         fig.add_trace(go.Scatter(
             x=adjusted_shares.index,
             y=adjusted_shares,
@@ -495,9 +503,6 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
         start = idx[0]
         end = idx[-1]  
 
-        st.write(start)
-        st.write(end)
-        
         dividends = _request_dividends(key=ds.name, select_col='Dividends',start=start, end=end)
         dividends = dividends[dividends>0]
         close = _request_dividends(key=ds.name, select_col='Close',start=start, end=end)
