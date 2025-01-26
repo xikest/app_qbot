@@ -616,9 +616,9 @@ def _add_stock_sheet(fig: go.Figure, ds: pd.Series) -> go.Figure:
                 f"<span style='font-size: 13px;'>"
                 f"PE(Tr/Fw): {dict_info.get('trailing PE')}/{dict_info.get('forward PE')} | Cash: {cap_ev}<br>"
                 f"Payout: {int(dict_info.get('payout ratio', 0))}% | Dividend: {dict_info.get('dividend yield', 0)}% | Short: {dict_info.get('short ratio', 0)}"
+                f"target mean/current price: {dict_info.get('target mean price')}/{dict_info.get('current price')}<br>"
                 f"</span>"
             )
-            
             
         else:
             info_text = (
@@ -734,7 +734,8 @@ class CashFlow:
             self._info['enterprise value'] = round(float(self._stock_data.info.get("enterpriseValue")), 1)
             self._info['market cap'] = round(float(self._stock_data.info.get("marketCap")), 1)
             self._info['payout ratio'] = round(float(self._stock_data.info.get("payoutRatio")) *100, 1)
-            self._info['dividend yield'] = round(float(self._stock_data.info.get("dividendYield")) *100, 1)
+            self._info['current price'] = round(float(self._stock_data.info.get("currentPrice")) *100, 1)
+            self._info['target mean price'] = round(float(self._stock_data.info.get("targetMeanPrice")) *100, 1)
             
         except:
             pass
