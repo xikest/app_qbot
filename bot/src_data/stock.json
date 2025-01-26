@@ -300,7 +300,7 @@
             "ADS.DE": "adidas AG",
             "BAS.DE": "BASF SE"
         },
-        "EWZ(MSCI Brazil )":{
+        "EWZ(MSCI Brazil)":{
             "VALE3.SA": "Vale S.A.",
             "NU": "Nu Holdings Ltd.",
             "PETR4": "PETR4",  
@@ -311,6 +311,18 @@
             "B3SA3.SA": "B3 S.A. - Brasil, Bolsa, Balcão",
             "ABEV3.SA": "Ambev S.A.",
             "SUZB3.SA": "Suzano S.A."
+        },
+        "EWY(MSCI South Korea)":{
+            "005930.KS": "Samsung Electronics Co., Ltd.",
+            "000660.KS": "SK hynix Inc.",
+            "105560.KS": "KB Financial Group Inc.",
+            "068270.KS": "Celltrion, Inc.",
+            "005380.KS": "Hyundai Motor Company",
+            "035420.KS": "NAVER Corporation",
+            "000270.KS": "Kia Corporation",
+            "055550.KS": "Shinhan Financial Group Co., Ltd.",
+            "005490.KS": "POSCO Holdings Inc.",
+            "207940.KS": "Samsung Biologics Co., Ltd."
         },
         "KWEB(CSI China Internet)":{
             "0700.HK": "TENCENT",
@@ -347,7 +359,45 @@
             "3659.T": "NEXON Co., Ltd.",
             "9697.T": "Capcom Co., Ltd.",
             "259960.KS": "KRAFTON, Inc."
+        },
+        "XAR(Aerospace & Defense)":{
+            "RKLB": "Rocket Lab USA, Inc.",
+            "BA": "The Boeing Company",
+            "TDG": "TransDigm Group Incorporated",
+            "AVAV": "AeroVironment, Inc.",
+            "GD": "General Dynamics Corporation",
+            "RTX": "RTX Corporation",
+            "GE": "GE Aerospace",
+            "NOC": "Northrop Grumman Corporation",
+            "HII": "Huntington Ingalls Industries, Inc.",
+            "LMT": "Lockheed Martin Corporation"
+        },
+        "NANC(Unusual Whales Subversive Democratic)":{
+            "NVDA": "NVIDIA Corporation",
+            "MSFT": "Microsoft Corporation",
+            "AMZN": "Amazon.com, Inc.",
+            "CRM": "Salesforce, Inc.",
+            "AAPL": "Apple Inc.",
+            "GOOG": "Alphabet Inc.",
+            "AXP": "American Express Company",
+            "COST": "Costco Wholesale Corporation",
+            "NFLX": "Netflix, Inc.",
+            "META": "Meta Platforms, Inc."
+        },
+        "KRUZ(Unusual Whales Subversive Republican)":{
+            "JPM": "JPMorgan Chase & Co.",
+            "NVDA": "NVIDIA Corporation",
+            "FIX": "Comfort Systems USA, Inc.",
+            "SPG": "Simon Property Group, Inc.",
+            "T": "AT&T Inc.",
+            "ACN": "Accenture plc",
+            "ANET": "Arista Networks Inc",
+            "FIS": "Fidelity National Information Services, Inc.",
+            "ALL": "The Allstate Corporation",
+            "CVX": "Chevron Corporation"
         }
+
+
 
 
 
