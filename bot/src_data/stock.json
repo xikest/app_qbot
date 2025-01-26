@@ -14,7 +14,6 @@
             "XLU": "Utilities",
             "TLT": "Treasury",
             "TIP": "Inflation",
-            "KEUA": "EU Carbon",
             "GLD": "Gold"
         },
         "correlation_chn": {
@@ -23,180 +22,202 @@
             "SBUX": "Starbucks",
             "AAPL": "Apple"
         },
-        "social": {
-            "META": "Meta"
+        "XLC(Communication)": {
+            "META": "Meta Platforms, Inc.",
+            "GOOGL": "Alphabet Inc.",
+            "GOOG": "Alphabet Inc.",
+            "NFLX": "Netflix, Inc.",
+            "DIS": "The Walt Disney Company",
+            "T": "AT&T Inc.",
+            "TTWO": "Take-Two Interactive Software, Inc.",
+            "VZ": "Verizon Communications Inc.",
+            "CMCSA": "Comcast Corporation",
+            "TMUS": "T-Mobile US, Inc."
         },
-        "contents": {
-            "DIS": "Disney",
-            "NFLX": "Netflix",
-            "SONY": "Sony"
+
+        "XLP(Consumer Staples)": {
+            "COST": "Costco Wholesale Corporation",
+            "PG": "The Procter & Gamble Company",
+            "WMT": "Walmart Inc.",
+            "KO": "The Coca-Cola Company",
+            "PEP": "PepsiCo, Inc.",
+            "PM": "Philip Morris International Inc.",
+            "CL": "Colgate-Palmolive Company",
+            "MO": "Altria Group, Inc.",
+            "MDLZ": "Mondelez International, Inc.",
+            "TGT": "Target Corporation"
         },
-        "hyper_scaler": {
-            "AMZN": "Amazon",
-            "GOOG": "Alphabet",
-            "MSFT": "Microsoft"
+        "XLF(Financial )": {
+            "BRK-B": "Berkshire Hathaway Inc.",
+            "JPM": "JPMorgan Chase & Co.",
+            "V": "Visa Inc.",
+            "MA": "Mastercard Incorporated",
+            "BAC": "Bank of America Corporation",
+            "WFC": "Wells Fargo & Company",
+            "GS": "The Goldman Sachs Group, Inc.",
+            "AXP": "American Express Company",
+            "SPGI": "S&P Global Inc.",
+            "MS": "Morgan Stanley"
         },
-        "communication": {
-            "TMUS": "T-Mobile",
-            "VZ": "Verizon",
-            "CMCSA": "Comcast"
-        },
-        "consumer_discretionary": {
-            "HD": "Home Depot",
-            "MCD": "McDonald",
-            "GM": "General Motors Company",
-            "F": "Ford Motor Company"
-        },
-        "consumer_staples": {
-            "PG": "Procter & Gamble",
-            "KO": "Coca-Cola",
-            "PEP": "PepsiCo",
-            "WMT": "Walmart",
-            "COST": "Costco",
-            "MO": "Altria",
-            "KMB": "Kimberly-Clark",
-            "CL": "Colgate",
-            "V": "VISA",
-            "AXP": "AMEX"
-        },
-        "energy_fossil": {
-            "XOM": "Exxon Mobil",
-            "CVX": "Chevron",
-            "SLB": "Schlumberger",
-            "HES": "Hess Corporation",
-            "OXY": "Occidental",
-            "URA": "Uranium"
-        },
-        "energy_green": {
-            "URA": "Uranium",
-            "TAN": "Sun-light energy",
-            "FSLR": "First Solar",
-            "RUN": "Sunrun",
-            "FAN": "Wind energy"
-        },
-        "financials": {
-            "BRK-B": "Berkshire Hathaway",
-            "JPM": "JPMorgan",
-            "BAC": "Bank of America",
-            "C": "Citi",
-            "WFC": "Wells Fargo",
-            "GS": "Goldman Sachs",
-            "MS": "Morgan Stanley",
-            "BLK": "BlackRock"
-        },
-        "health_care": {
-            "JNJ": "Johnson & Johnson",
-            "PFE": "Pfizer",
+        "XLV(Health Care)": {
+            "LLY": "Eli Lilly and Company",
             "UNH": "UnitedHealth Group Incorporated",
-            "ABBV": "AbbVie",
-            "MRK": "Merck",
-            "AMGN": "Amgen",
-            "TMO": "Thermo Fisher Scientific",
-            "LLY": "Eli Lilly",
-            "BIIB": "Biogen",
-            "MRNA": "Moderna"
+            "JNJ": "Johnson & Johnson",
+            "ABBV": "AbbVie Inc.",
+            "MRK": "Merck & Co., Inc.",
+            "TMO": "Thermo Fisher Scientific Inc.",
+            "ABT": "Abbott Laboratories",
+            "ISRG": "Intuitive Surgical, Inc.",
+            "PFE": "Pfizer Inc.",
+            "DHR": "Danaher Corporation"
         },
-        "defence": {
-            "LMT": "Lockheed Martin",
-            "RTX": "Raytheon",
-            "GD": "General Dynamics",
-            "NOC": "Northrop"
+        "XLB(Materials)": {
+            "LIN": "Linde plc",
+            "SHW": "The Sherwin-Williams Company",
+            "APD": "Air Products and Chemicals, Inc.",
+            "ECL": "Ecolab Inc.",
+            "FCX": "Freeport-McMoRan Inc.",
+            "NEM": "Newmont Corporation",
+            "CTVA": "Corteva, Inc.",
+            "VMC": "Vulcan Materials Company",
+            "DD": "DuPont de Nemours, Inc.",
+            "MLM": "Martin Marietta Materials, Inc."
         },
-        "water": {
-            "PIO": "global water etf",
-            "PHO": "US water etf",
-            "AWK": "American Water Works Company",
-            "AWR": "American States Water Company",
-            "CWT": "California Water Service Group",
-            "XYL": "Xylem"
-        },
-        "food": {
-            "CMG": "Chipotle Mexican Grill",
-            "QSR": "Restaurant Brands International",
-            "MCD": "McDonald's",
-            "KR": "Kroger",
-            "USFD": "US Foods Holding Corp",
-            "TSN": "Tyson Foods"
-        },
-        "semicon": {
-            "AMAT": "Applied Materials",
-            "LRCX": "Lam Research",
-            "ASML": "ASML Holding NV",
-            "TSM": "Taiwan Semiconductor Manufacturing Company",
-            "MU": "Micron Technology",
-            "INTC": "Intel",
-            "ON": "ON Semiconductor",
-            "NXPI": "NXP Semiconductors",
-            "AVGO": "Broadcom",
-            "TXN": "Texas Instruments",
-            "NVDA": "NVIDIA",
-            "QCOM": "Qualcomm",
-            "MRVL": "Marvell Technology",
-            "ARM": "ARM Holdings"
-        },
-        "industrials": {
-            "HON": "Honeywell",
-            "UNP": "Union Pacific",
-            "GE": "General Electric",
+        "XLI(Industrial)": {
+            "GE": "GE Aerospace",
             "CAT": "Caterpillar Inc.",
-            "UPS": "United Parcel Service"
+            "RTX": "RTX Corporation",
+            "HON": "Honeywell International Inc.",
+            "UNP": "Union Pacific Corporation",
+            "BA": "The Boeing Company",
+            "ETN": "Eaton Corporation plc",
+            "UBER": "Uber Technologies, Inc.",
+            "ADP": "Automatic Data Processing, Inc.",
+            "DE": "Deere & Company"
         },
-        "bond": {
-            "HYBB": "iShares US High Yield Corporate Bond ETF",
-            "LQD": "iShares iBoxx $ Investment Grade Corporate Bond ETF",
-            "HYG": "iShares iBoxx $ High Yield Corporate Bond ETF",
-            "TLT": "iShares 20+ Year Treasury Bond ETF"
+        "XLY(Consumer Discretionary)": {
+            "AMZN": "Amazon.com, Inc.",
+            "TSLA": "Tesla, Inc.",
+            "HD": "The Home Depot, Inc.",
+            "MCD": "McDonald's Corporation",
+            "BKNG": "Booking Holdings Inc.",
+            "LOW": "Lowe's Companies, Inc.",
+            "TJX": "The TJX Companies, Inc.",
+            "SBUX": "Starbucks Corporation",
+            "NKE": "NIKE, Inc.",
+            "CMG": "Chipotle Mexican Grill, Inc."
         },
-        "technology": {
-            "AAPL": "Apple",
-            "MSFT": "Microsoft",
-            "NVDA": "NVIDIA",
-            "ADBE": "Adobe",
-            "META": "Meta",
-            "AMZN": "Amazon",
-            "GOOG": "Alphabet",
-            "NFLX": "Netflix"
+        "XLK(Technology)":{
+            "AAPL": "Apple Inc.",
+            "NVDA": "NVIDIA Corporation",
+            "MSFT": "Microsoft Corporation",
+            "AVGO": "Broadcom Inc.",
+            "CRM": "Salesforce, Inc.",
+            "ORCL": "Oracle Corporation",
+            "CSCO": "Cisco Systems, Inc.",
+            "ACN": "Accenture plc",
+            "NOW": "ServiceNow, Inc.",
+            "IBM": "International Business Machines Corporation"
         },
-        "materials": {
-            "LIN": "Linde",
-            "SHW": "Sherwin-Williams",
-            "ECL": "Ecolab",
-            "NEM": "Newmont",
-            "DD": "DuPont",
-            "DOW": "Dow",
-            "PPG": "PPG Industries",
-            "APD": "Air Products and Chemicals",
-            "CTVA": "Corteva",
-            "FCX": "Freeport-McMoRan",
-            "GDX": "gold miner",
-            "COPX": "cooper miner",
-            "ILIT": "lithium miner"
+        
+        "XLU(Utilities)": {
+            "NEE": "NextEra Energy, Inc.",
+            "SO": "The Southern Company",
+            "DUK": "Duke Energy Corporation",
+            "CEG": "Constellation Energy Corporation",
+            "SRE": "Sempra",
+            "AEP": "American Electric Power Company, Inc.",
+            "VST": "Vistra Corp.",
+            "D": "Dominion Energy, Inc.",
+            "PCG": "PG&E Corporation",
+            "PEG": "Public Service Enterprise Group Incorporated"
         },
-        "real_estate": {
-            "AMT": "American Tower",
-            "PLD": "Prologis",
-            "CCI": "Crown Castle",
-            "EQIX": "Equinix",
-            "DLR": "Digital Realty Trust",
-            "SPG": "Simon Property Group",
-            "WELL": "Welltower",
-            "O": "Realty Income"
+        "XLRE(Real Estate)": {
+            "PLD": "Prologis, Inc.",
+            "EQIX": "Equinix, Inc.",
+            "AMT": "American Tower Corporation",
+            "WELL": "Welltower Inc.",
+            "DLR": "Digital Realty Trust, Inc.",
+            "SPG": "Simon Property Group, Inc.",
+            "PSA": "Public Storage",
+            "O": "Realty Income Corporation",
+            "CBRE": "CBRE Group, Inc.",
+            "CCI": "Crown Castle Inc."
         },
-        "utilities": {
-            "IDU": "iShares DJ Utility Sector Index Fund",
-            "VPU": "Vanguard Utilities ETF",
-            "XLU": "Utilities Select Sector SPDR Fund",
-            "NEE": "NextEra Energy",
-            "DUK": "Duke Energy",
-            "SO": "Southern Company",
-            "EXC": "Exelon",
-            "D": "Dominion Energy",
-            "AEP": "American Electric Power",
-            "SRE": "Sempra Energy"},
-        "infra": {
-            "GRID": "First Trust Nasdaq Clean Edge Smart Grid Infrastructure Index Fund",
-            "PAVE": "Global X U.S. Infrastructure Development ETF"
+        "XLE(Energy)": {"XOM": "Exxon Mobil Corporation",
+                    "CVX": "Chevron Corporation",
+                    "COP": "ConocoPhillips",
+                    "WMB": "The Williams Companies, Inc.",
+                    "EOG": "EOG Resources, Inc.",
+                    "OKE": "ONEOK, Inc.",
+                    "SLB": "Schlumberger Limited",
+                    "KMI": "Kinder Morgan, Inc.",
+                    "PSX": "Phillips 66",
+                    "MPC": "Marathon Petroleum Corporation"
+                },
+        "ARKK(ARK Innovation)": {
+            "TSLA": "Tesla, Inc.",
+            "ROKU": "Roku, Inc.",
+            "COIN": "Coinbase Global, Inc.",
+            "RBLX": "Roblox Corporation",
+            "PLTR": "Palantir Technologies Inc.",
+            "HOOD": "Robinhood Markets, Inc.",
+            "SHOP.TO": "Shopify Inc.",
+            "CRSP": "CRISPR Therapeutics AG",
+            "SQ": "Block, Inc.",
+            "ACHR": "Archer Aviation Inc."
+        },
+        "EWJ(MSCI Japan)": {
+            "7203.T": "Toyota Motor Corporation",
+            "6758.T": "Sony Group Corporation",
+            "8306.T": "Mitsubishi UFJ Financial Group, Inc.",
+            "6501.T": "Hitachi, Ltd.",
+            "6098.T": "Recruit Holdings Co., Ltd.",
+            "8316.T": "Sumitomo Mitsui Financial Group, Inc.",
+            "6861.T": "Keyence Corporation",
+            "8035.T": "Tokyo Electron Limited",
+            "8766.T": "Tokio Marine Holdings, Inc.",
+            "9983.T": "Fast Retailing Co., Ltd."
+        },
+        "PICK(Global Metals & Mining Producers)": {
+            "BHP.AX": "BHP Group Limited",
+            "RIO.L": "Rio Tinto Group",
+            "FCX": "Freeport-McMoRan Inc.",
+            "GLEN.L": "Glencore plc",
+            "AAL.L": "Anglo American plc",
+            "VALE3.SA": "Vale S.A.",
+            "NUE": "Nucor Corporation",
+            "RIO.AX": "Rio Tinto Group",
+            "FMG.AX": "Fortescue Ltd",
+            "TECK-B.TO": "Teck Resources Limited"
+        },
+
+        "GRID(Smart Grid Infrastructure)":{
+            "SU.PA": "Schneider Electric S.E.",
+            "ABBN.SW": "ABB Ltd",
+            "JCI": "Johnson Controls International plc",
+            "NG.L": "National Grid plc",
+            "ETN": "Eaton Corporation plc",
+            "PWR": "Quanta Services, Inc.",
+            "HUBB": "Hubbell Incorporated",
+            "PRY.MI": "Prysmian S.p.A.",
+            "APTV": "Aptiv PLC",
+            "TSLA": "Tesla, Inc."
+        },
+        "CIBR(Cybersecurity)":{
+            "AVGO": "Broadcom Inc.",
+            "CRWD": "CrowdStrike Holdings, Inc.",
+            "INFY": "Infosys Limited",
+            "CSCO": "Cisco Systems, Inc.",
+            "PANW": "Palo Alto Networks, Inc.",
+            "NET": "Cloudflare, Inc.",
+            "CHKP": "Check Point Software Technologies Ltd.",
+            "FTNT": "Fortinet, Inc.",
+            "HO.PA": "Thales S.A.",
+            "AKAM": "Akamai Technologies, Inc."
         }
+
+
     },
     "descr": {}
 }
