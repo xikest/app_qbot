@@ -7,7 +7,8 @@ from pandas import Series
 from io import BytesIO
 import numpy as np
 import yfinance as yf
-import FinanceDataReader as fdr
+# import FinanceDataReader as fdr
+from bot.src_data.FinanceDataReader_mdify import data as fdr
 from datetime import timedelta
 import plotly.graph_objects as go
 import streamlit as st

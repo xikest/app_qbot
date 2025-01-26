@@ -1,10 +1,10 @@
 import yfinance as yf
 import pandas as pd
-import FinanceDataReader as fdr
+# import FinanceDataReader as fdr
+from bot.src_data.FinanceDataReader_mdify import data as fdr
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
 
-import streamlit as st
 class StockIndicators(Indicators):
     def __init__(self):
         super().__init__(indicators_file="stock.json")

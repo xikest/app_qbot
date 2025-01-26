@@ -1,7 +1,9 @@
 from pandas import Series
-import FinanceDataReader as fdr
+# import FinanceDataReader as fdr
+from bot.src_data.FinanceDataReader_mdify import data as fdr
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
+
 
 class EconomicIndicators(Indicators):
 
