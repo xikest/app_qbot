@@ -215,7 +215,140 @@
             "FTNT": "Fortinet, Inc.",
             "HO.PA": "Thales S.A.",
             "AKAM": "Akamai Technologies, Inc."
+        },
+        "FLOW(Cash Flow Kings)":{
+            "COP": "ConocoPhillips",
+            "WBD": "Warner Bros. Discovery, Inc.",
+            "BMY": "Bristol-Myers Squibb Company",
+            "HPE": "Hewlett Packard Enterprise Company",
+            "EXPE": "Expedia Group, Inc.",
+            "T": "AT&T Inc.",
+            "CAH": "Cardinal Health, Inc.",
+            "MO": "Altria Group, Inc.",
+            "ABNB": "Airbnb, Inc.",
+            "CVX": "Chevron Corporation"
+        },
+        "COPX(Copper Miners)":{
+            "FM.TO": "First Quantum Minerals Ltd.",
+            "BOL.ST": "Boliden AB (publ)",
+            "02899": "02899", 
+            "IVN.TO": "Ivanhoe Mines Ltd.",
+            "BHP.AX": "BHP Group Limited",
+            "ANTO.L": "Antofagasta plc",
+            "GLEN.L": "Glencore plc",
+            "LUN.TO": "Lundin Mining Corporation",
+            "CS.TO": "Capstone Copper Corp.",
+            "SCCO": "Southern Copper Corporation"
+        },
+        "GDX(Gold Miners)":{
+            "NEM": "Newmont Corporation",
+            "AEM.TO": "Agnico Eagle Mines Limited",
+            "ABX.TO": "Barrick Gold Corporation",
+            "WPM.TO": "Wheaton Precious Metals Corp.",
+            "FNV.TO": "Franco-Nevada Corporation",
+            "GFI": "Gold Fields Limited",
+            "AU": "AngloGold Ashanti plc",
+            "K.TO": "Kinross Gold Corporation",
+            "NST.AX": "Northern Star Resources Limited",
+            "02899": "02899"  
+        },
+        "OIH(Oil Services)":{
+            "SLB": "Schlumberger Limited",
+            "BKR": "Baker Hughes Company",
+            "HAL": "Halliburton Company",
+            "TS": "Tenaris S.A.",
+            "FTI": "TechnipFMC plc",
+            "NOV": "NOV Inc.",
+            "NE": "Noble Corporation plc",
+            "CHX": "ChampionX Corporation",
+            "WFRD": "Weatherford International plc",
+            "WHD": "Cactus, Inc."
+        },
+        "PHO(Water Resources)":{
+            "ECL": "Ecolab Inc.",
+            "ROP": "Roper Technologies, Inc.",
+            "FERG": "Ferguson Enterprises Inc.",
+            "VLTO": "Veralto Corporation",
+            "XYL": "Xylem Inc.",
+            "CNM": "Core & Main, Inc.",
+            "MLI": "Mueller Industries, Inc.",
+            "WAT": "Waters Corporation",
+            "TTEK": "Tetra Tech, Inc.",
+            "PNR": "Pentair plc"
+        },
+        "EWS(MSCI Singapore)":{
+            "D05.SI": "DBS Group Holdings Ltd",
+            "O39.SI": "Oversea-Chinese Banking Corporation Limited",
+            "SE": "Sea Limited",
+            "S68.SI": "Singapore Exchange Limited",
+            "BN4.SI": "Keppel Ltd.",
+            "U11.SI": "United Overseas Bank Limited",
+            "C6L.SI": "Singapore Airlines Limited",
+            "A17U.SI": "CapitaLand Ascendas REIT",
+            "Z74.SI": "Singapore Telecommunications Limited",
+            "BS6.SI": "Yangzijiang Shipbuilding (Holdings) Ltd."
+        },
+        "EWG(MSCI Germany)":{
+            "SAP.DE": "SAP SE",
+            "SIE.DE": "Siemens Aktiengesellschaft",
+            "ALV.DE": "Allianz SE",
+            "DTE.DE": "Deutsche Telekom AG",
+            "MUV2.DE": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
+            "DB1.DE": "Deutsche Börse AG",
+            "IFX.DE": "Infineon Technologies AG",
+            "MBG.DE": "Mercedes-Benz Group AG",
+            "ADS.DE": "adidas AG",
+            "BAS.DE": "BASF SE"
+        },
+        "EWZ(MSCI Brazil )":{
+            "VALE3.SA": "Vale S.A.",
+            "NU": "Nu Holdings Ltd.",
+            "PETR4": "PETR4",  
+            "ITUB4": "ITUB4",  
+            "PETR3.SA": "Petróleo Brasileiro S.A. - Petrobras",
+            "WEGE3.SA": "WEG S.A.",
+            "BBDC4": "BBDC4",  
+            "B3SA3.SA": "B3 S.A. - Brasil, Bolsa, Balcão",
+            "ABEV3.SA": "Ambev S.A.",
+            "SUZB3.SA": "Suzano S.A."
+        },
+        "KWEB(CSI China Internet)":{
+            "0700.HK": "TENCENT",
+            "9988.HK": "Alibaba Group Holding Limited",
+            "3690.HK": "Meituan",
+            "9961.HK": "Trip.com Group Limited",
+            "PDD": "PDD Holdings Inc.",
+            "BEKE": "KE Holdings Inc.",
+            "9888.HK": "Baidu, Inc.",
+            "YMM": "Full Truck Alliance Co. Ltd.",
+            "9999.HK": "NetEase, Inc.",
+            "BZ": "Kanzhun Limited"
+        },
+        "EUFN(Europe Financials)":{
+            "HSBA.L": "HSBC Holdings plc",
+            "ALV.DE": "Allianz SE",
+            "UBSG.SW": "UBS Group AG",
+            "ZURN.SW": "Zurich Insurance Group AG",
+            "SAN.MC": "Banco Santander, S.A.",
+            "LSEG.L": "London Stock Exchange Group plc",
+            "MUV2.DE": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
+            "CS.PA": "AXA SA",
+            "BNP.PA": "BNP Paribas SA",
+            "UCG.MI": "UniCredit S.p.A."
+        },
+        "NERD(Video Games)":{
+            "APP": "AppLovin Corporation",
+            "7974.T": "Nintendo Co., Ltd.",
+            "RBLX": "Roblox Corporation",
+            "EA": "Electronic Arts Inc.",
+            "TTWO": "Take-Two Interactive Software, Inc.",
+            "U": "Unity Software Inc.",
+            "7832.T": "BANDAI NAMCO Holdings Inc.",
+            "3659.T": "NEXON Co., Ltd.",
+            "9697.T": "Capcom Co., Ltd.",
+            "259960.KS": "KRAFTON, Inc."
         }
+
 
 
     },
