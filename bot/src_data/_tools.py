@@ -11,7 +11,6 @@ import yfinance as yf
 from bot.src_data.FinanceDataReader_mdify import data as fdr
 from datetime import timedelta
 import plotly.graph_objects as go
-import streamlit as st
 
 def validate_date(func):
     @wraps(func)
@@ -358,7 +357,6 @@ def _add_scatter(fig: go.Figure, ds: pd.Series,  y: dict = {'JTSJOR':'Job Openin
     maker_data=  fdr.DataReader(f'FRED:{list(marker.keys())[0]}', start=start, end=end).iloc[:,0]
     y_data = fdr.DataReader(f'FRED:{list(y.keys())[0]}', start=start, end=end).iloc[:,0]
     x_data = ds
-
     
     # 데이터 통합
     data = pd.concat([y_data, x_data, maker_data], axis=1)
@@ -366,6 +364,7 @@ def _add_scatter(fig: go.Figure, ds: pd.Series,  y: dict = {'JTSJOR':'Job Openin
 
     # 결측값 처리
     data = data.ffill().resample('ME').last().dropna()
+
 
     # 최근 2년 데이터 필터링
     two_years_ago = (end - timedelta(days=365 * 2)).strftime('%Y-%m-%d')
@@ -398,6 +397,8 @@ def _add_scatter(fig: go.Figure, ds: pd.Series,  y: dict = {'JTSJOR':'Job Openin
             showscale=True,
             opacity=0.8
         ),
+        text=[f"{x_name}: {x_val}%, <br>{y_name}: {y_val}%" for x_val, y_val in zip(data[x_name], data[y_name])],
+        hoverinfo='text',
         name='Scatter'
     ))
 
@@ -407,13 +408,14 @@ def _add_scatter(fig: go.Figure, ds: pd.Series,  y: dict = {'JTSJOR':'Job Openin
         y=recent_data[f'{y_name} MA'],
         mode='lines',
         line=dict(color='red', width=1),
-        name='3-Month Moving Average'
+        name='3-Month Moving Average',
+        hoverinfo='skip'
     ))
-
-    if 'rate' in maker_name.lower():
-        hover_text = f'{maker_name}: {latest_data[maker_name].values[0]:.2f}%'
+    
+    if 'yield' in maker_name.lower() or 'rate' in maker_name.lower():
+        hover_text = f'{maker_name}: {latest_data[maker_name].values[0]:.2f}% @{end.strftime("%y%m%d")}'
     else:
-        hover_text = f'{maker_name}: {latest_data[maker_name].values[0]:.2f}'
+        hover_text = f'{maker_name}: {latest_data[maker_name].values[0]:.2f} @{end.strftime("%y%m%d")}'
 
     # 최근 데이터 레이블 추가
     fig.add_trace(go.Scatter(
@@ -423,6 +425,7 @@ def _add_scatter(fig: go.Figure, ds: pd.Series,  y: dict = {'JTSJOR':'Job Openin
         text=[hover_text],
         textposition='top center',
         marker=dict(size=latest_size * 2, color='red', line=dict(color='red', width=2)),
+        hoverinfo='text',
         name=f'Latest {maker_name}'
     ))
 

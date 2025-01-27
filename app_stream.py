@@ -24,8 +24,8 @@ def select_date_sidebar():
     start_year, end_year = st.sidebar.slider(
         "Select Year Range",
         min_value=2000,
-        max_value=2024,
-        value=(2020, 2024),  # Default range
+        max_value=2025,
+        value=(2020, 2025),  # Default range
         step=1
     )
     
@@ -36,6 +36,7 @@ def select_date_sidebar():
         end = datetime.today().strftime('%Y-%m-%d')
     else:
         end = f"{end_year}-12-31"
+    
     return start, end
         
 def display_indicators():

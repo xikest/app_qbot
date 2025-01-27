@@ -3,7 +3,7 @@ from pandas import Series
 from bot.src_data.FinanceDataReader_mdify import data as fdr
 from ._abstract_indicators import Indicators
 from ._tools import validate_date, index_to_datetime, Plot
-
+import streamlit as st
 
 class EconomicIndicators(Indicators):
 
@@ -17,8 +17,9 @@ class EconomicIndicators(Indicators):
                  start: str = None, end: str = None, *args, **kwargs) -> Series:
         ds = fdr.DataReader(f'FRED:{key}', start=start, end=end).iloc[:,0]
         ds.name = name
-        
+
         # to_pctchange_cum = kwargs.get('to_pctchange_cum')   
         # if to_pctchange_cum:           
         #     ds=ds.pct_change(12).mul(100)              
         return ds
+    
